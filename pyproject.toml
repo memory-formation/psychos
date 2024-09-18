@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dmf-utils"
+description = "Library"
+requires-python = ">=3.7"
+license = {text = "MIT"}
+dynamic = ["version", "readme"]
+dependencies = [
+    "lazy_loader",
+    "typing-extensions; python_version == '3.7'",
+    "webcolors>=1.11",
+    "pyglet",
+]
+authors = [
+    {name="Dynamics of Memory Formation Group", email="llfuentemilla@ub.edu"},
+    {name="Pablo Marcos-Manchón", email="pmarcos@ub.edu"},
+]
+keywords = [
+    "psychology",
+    "research",
+    "python",
+    "gui",
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.urls]
+repository = "https://github.com/memory-formation/psychogui"
+
+[tool.setuptools.packages.find]
+include = ["psychogy*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "psychogy.__version__.__version__"}
+readme = {file = ["README.md"], content-type = "text/markdown"}
+
+[project.optional-dependencies]
+docs = [
+    "sphinx",
+    "pydata-sphinx-theme",
+]

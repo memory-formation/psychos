@@ -5,12 +5,11 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "dmf-utils"
 description = "Library"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 license = {text = "MIT"}
 dynamic = ["version", "readme"]
 dependencies = [
     "lazy_loader",
-    "typing-extensions; python_version == '3.7'",
     "webcolors>=1.11",
     "pyglet",
 ]
@@ -48,10 +47,10 @@ classifiers = [
 repository = "https://github.com/memory-formation/psychos"
 
 [tool.setuptools.packages.find]
-include = ["psychogy*"]
+include = ["psychos*"]
 
 [tool.setuptools.dynamic]
-version = {attr = "psychogy.__version__.__version__"}
+version = {attr = "psychos.__version__.__version__"}
 readme = {file = ["README.md"], content-type = "text/markdown"}
 
 [project.optional-dependencies]

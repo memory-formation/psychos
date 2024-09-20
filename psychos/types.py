@@ -8,7 +8,7 @@ try:  # Compatibility with Python 3.7
 except ImportError:
     from typing_extensions import Literal  # type: ignore
 
-__all__ = ["Literal", "ColorType"]
+__all__ = ["Literal", "ColorType", "AnchorHorizontal", "AnchorVertical", "PathStr"]
 
 PathStr = Union["str", "Path"]
 ColorType = Union[
@@ -18,3 +18,6 @@ ColorType = Union[
     "tuple[float, float, float]",
     "tuple[float, float, float, float]",
 ]
+
+AnchorHorizontal = Literal["left", "center", "right"]
+AnchorVertical = Literal["top", "center", "bottom", "baseline"]

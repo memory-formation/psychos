@@ -1,5 +1,5 @@
 """
-psychogui: A Python library for creating and managing psychology experiments.
+psychos: A Python library for creating and managing psychology experiments.
 
 This software is licensed under the MIT License. See the LICENSE file in the root 
 directory for full license terms.

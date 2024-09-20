@@ -20,6 +20,9 @@ authors = [
 ]
 keywords = [
     "psychology",
+    "behavioural",
+    "experiments",
+    "neuroscience",
     "research",
     "python",
     "gui",
@@ -42,7 +45,7 @@ classifiers = [
 ]
 
 [project.urls]
-repository = "https://github.com/memory-formation/psychogui"
+repository = "https://github.com/memory-formation/psychos"
 
 [tool.setuptools.packages.find]
 include = ["psychogy*"]

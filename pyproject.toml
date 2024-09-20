@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "dmf-utils"
+name = "psychos"
 description = "Library"
 requires-python = ">=3.8"
 license = {text = "MIT"}
@@ -24,7 +24,7 @@ keywords = [
     "neuroscience",
     "research",
     "python",
-    "gui",
+    "pyglet",
 ]
 
 classifiers = [

@@ -130,20 +130,19 @@ class NormalizedUnits(Units):
     - (1, -1) is the bottom-right corner of the window.
     """
 
-    def __init__(self, width: int, height: int):
-        self.width = width
-        self.height = height
+    def __init__(self, window: "Window"):
+        self.window = window
 
     @docstring(Units.from_window)
     @classmethod
     def from_window(cls, window: "Window") -> "Units":
-        return cls(width=window.width, height=window.height)
+        return cls(window=window)
 
     @docstring(Units.__call__)
     def __call__(self, x: float, y: float) -> Tuple[int, int]:
-        x_pixel = int((x + 1) * self.width / 2)
-        x_pixel = min(max(x_pixel, 0), self.width - 1)
-        y_pixel = int((1 - y) * self.height / 2)
-        y_pixel = min(max(y_pixel, 0), self.height - 1)
+        x_pixel = int((x + 1) * self.window.width / 2)
+        x_pixel = min(max(x_pixel, 0), self.window.width - 1)
+        y_pixel = int((1 - y) * self.window.height / 2)
+        y_pixel = min(max(y_pixel, 0), self.window.height - 1)
 
         return x_pixel, y_pixel

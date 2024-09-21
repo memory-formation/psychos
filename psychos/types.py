@@ -21,3 +21,5 @@ ColorType = Union[
 
 AnchorHorizontal = Literal["left", "center", "right"]
 AnchorVertical = Literal["top", "center", "bottom", "baseline"]
+
+UnitType = Literal["pixel", "normalized"]

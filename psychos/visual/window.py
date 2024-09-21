@@ -1,12 +1,12 @@
-from typing import Optional
+from typing import Optional, Union
 
 import pyglet
 from pyglet.app import EventLoop
 from pyglet.window import Window as PygletWindow
 
-
-from ..utils import color_to_rgba, coordinates_to_pixel
-from ..types import ColorType
+from .units import Units
+from ..utils import color_to_rgba
+from ..types import ColorType, UnitType
 
 __all__ = ["Window", "get_window"]
 
@@ -33,6 +33,7 @@ class Window(PygletWindow):
         mouse_visible: bool = True,
         event_loop: Optional["EventLoop"] = None,
         default_window: bool = True,
+        units: Union[UnitType, "Units"] = "normalized",
         **kwargs,
     ):
         super().__init__(
@@ -43,14 +44,20 @@ class Window(PygletWindow):
             visible=visible,
             **kwargs,
         )
+
         self.event_loop = event_loop or EventLoop()
         self.background_color = None
         self.set_background_color(background_color)
         self.clear_after_flip = clear_after_flip
         if not mouse_visible:
             self.set_mouse_visible(mouse_visible)
-        # self.viewport = [0, 0, self.width, self.height]
+
         self.dispatch_events()
+
+        if isinstance(units, str):
+            units = Units.from_name(units, self)
+
+        self.units = units
 
         if default_window:
             global DEFAULT_WINDOW
@@ -76,6 +83,3 @@ class Window(PygletWindow):
         clear = clear if clear is not None else self.clear_after_flip
         if clear:
             self.clear()
-
-    def _coordinates_to_pixel(self, x: float, y: float) -> tuple[int, int]:
-        return coordinates_to_pixel((x, y), self.width, self.height)

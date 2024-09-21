@@ -1,8 +1,9 @@
 from typing import Optional
 
+import pyglet
 from pyglet.app import EventLoop
-from pyglet.gl import glClearColor
-import pyglet.window
+from pyglet.window import Window as PygletWindow
+
 
 from ..utils import color_to_rgba, coordinates_to_pixel
 from ..types import ColorType
@@ -19,7 +20,7 @@ def get_window() -> "Window":
     return DEFAULT_WINDOW
 
 
-class Window(pyglet.window.Window):
+class Window(PygletWindow):
     def __init__(
         self,
         width: Optional[int] = None,
@@ -34,7 +35,7 @@ class Window(pyglet.window.Window):
         default_window: bool = True,
         **kwargs,
     ):
-        super(pyglet.window.Window, self).__init__(
+        super().__init__(
             width=width,
             height=height,
             caption=caption,
@@ -48,6 +49,8 @@ class Window(pyglet.window.Window):
         self.clear_after_flip = clear_after_flip
         if not mouse_visible:
             self.set_mouse_visible(mouse_visible)
+        # self.viewport = [0, 0, self.width, self.height]
+        self.dispatch_events()
 
         if default_window:
             global DEFAULT_WINDOW
@@ -59,11 +62,13 @@ class Window(pyglet.window.Window):
 
         if color is not None:
             self.background_color = color
-            glClearColor(*color)  # Set the OpenGL clear color
+            pyglet.gl.glClearColor(*color)  # Set the OpenGL clear color
             self.clear()  # Clear the window with the new background color
 
     def wait(self, timeout: float = 1):
+        self.dispatch_events()
         self.event_loop.sleep(timeout)
+        self.dispatch_events()
 
     def flip(self, clear: Optional[bool] = None):
         super().flip()

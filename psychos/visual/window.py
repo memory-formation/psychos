@@ -24,10 +24,13 @@ def get_window() -> "Window":
 
     Raises
     ------
-    ValueError
+    RuntimeError
         If no window has been created yet.
     """
-    return next(iter(pyglet.app.windows))
+    windows = list(pyglet.app.windows)
+    if not windows:
+        raise RuntimeError("No window has been created yet.")
+    return windows[0]
 
 
 class Window(PygletWindow):

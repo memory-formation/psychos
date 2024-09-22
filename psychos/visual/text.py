@@ -1,16 +1,17 @@
-from typing import TYPE_CHECKING, Optional, Union
+from typing import Optional, Union, TYPE_CHECKING
+
 from pyglet.text import Label
 
-from .window import get_window
 from ..utils import color_to_rgba_int
 from .units import Units
+from .window import get_window
 
 if TYPE_CHECKING:
     from ..visual.window import Window
     from ..types import AnchorHorizontal, AnchorVertical, ColorType, UnitType
 
 
-class Text:
+class Text(Label):
     """
     A class to represent text in a Pyglet window using a Label component.
 
@@ -75,7 +76,7 @@ class Text:
         coordinate_units: Optional[Union["UnitType", "Units"]] = None,
         **kwargs,
     ):
-
+        # Retrieve window and set coordinate system
         self.window = window or get_window()
 
         if coordinate_units is not None:
@@ -85,12 +86,16 @@ class Text:
             coordinate_units = self.window.units
 
         self.coordinate_units = coordinate_units
+
+        # Convert position using coordinate units
         x, y = self.coordinate_units(*position)
+
+        # Convert color to RGBA
         color = (255, 255, 255, 255) if color is None else color_to_rgba_int(color)
 
-        # Instantiate the internal Label component
-        self.component = Label(
-            text,
+        # Initialize Label (superclass)
+        super().__init__(
+            text=text,
             x=x,
             y=y,
             width=width,
@@ -101,66 +106,26 @@ class Text:
             multiline=multiline,
             font_name=font_name,
             font_size=font_size,
-            align=align,
             bold=bold,
             italic=italic,
             stretch=stretch,
+            align=align,
             color=color,
             **kwargs,
         )
 
-    def draw(self):
-        """Draw the text component."""
-        self.component.draw()
-
-    @property
-    def text(self) -> str:
-        """Get the current text."""
-        return self.component.text
-
-    @text.setter
-    def text(self, value: str):
-        """Set the current text."""
-        self.component.text = value
-
     @property
     def position(self) -> tuple[float, float]:
         """Get the position of the text."""
-        return self.component.x, self.component.y
+        return self.x, self.y
 
     @position.setter
     def position(self, value: tuple[float, float]):
         """Set the position of the text."""
         x, y = self.coordinate_units(*value)
-        self.component.x = x
-        self.component.y = y
+        self.x = x
+        self.y = y
 
-    @property
-    def color(self) -> tuple[int, int, int, int]:
-        """Get the color of the text."""
-        return self.component.color
-
-    @color.setter
-    def color(self, value: Optional["ColorType"]):
-        """Set the color of the text."""
-        self.component.color = color_to_rgba_int(value)
-
-    @property
-    def font_name(self) -> str:
-        """Get the font name."""
-        return self.component.font_name
-
-    @font_name.setter
-    def font_name(self, value: str):
-        """Set the font name."""
-        self.component.font_name = value
-
-    @property
-    def font_size(self) -> float:
-        """Get the font size."""
-        return self.component.font_size
-
-    @font_size.setter
-    def font_size(self, value: float):
-        """Set the font size."""
-        self.component.font_size = value
+    def draw(self) -> "Text":
+        super().draw()
+        return self

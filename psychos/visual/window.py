@@ -82,7 +82,7 @@ class Window(PygletWindow):
         visible: bool = True,
         clear_after_flip: bool = True,
         background_color: Optional["ColorType"] = None,
-        mouse_visible: bool = True,
+        mouse_visible: bool = False,
         units: Union["UnitType", "Units"] = "normalized",
         **kwargs,
     ):

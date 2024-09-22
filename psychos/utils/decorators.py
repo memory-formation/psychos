@@ -1,4 +1,3 @@
-import functools
 from typing import Callable
 
 __all__ = ["docstring"]
@@ -22,6 +21,6 @@ def docstring(from_method: Callable) -> Callable:
     def decorator(to_method):
         # Copy the docstring from the source method to the target method
         to_method.__doc__ = from_method.__doc__
-        return functools.update_wrapper(to_method, from_method)
+        return to_method
 
     return decorator

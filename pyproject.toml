@@ -58,3 +58,6 @@ docs = [
     "sphinx",
     "pydata-sphinx-theme",
 ]
+test = [
+    "pytest",
+]

@@ -1,5 +1,5 @@
 import warnings
-import datetime
+from datetime import datetime
 from time import sleep, time as _time
 from typing import Literal, Optional, Union, Callable
 
@@ -110,8 +110,12 @@ class Clock:
             return current_time.strftime(self.fmt)
         elif callable(self.fmt):
             return self.fmt(elapsed_time)
-        else:
+        elif self.fmt is None:
             return elapsed_time
+        else:
+            raise TypeError(
+                "Invalid type for 'fmt'. Must be None, a string, or a callable."
+            )
 
     def reset(self):
         """
@@ -174,6 +178,10 @@ class Interval:
         start_time: Optional[float] = None,
     ):
         self.duration = duration
+        if on_overtime not in ["ignore", "warning", "exception"]:
+            raise ValueError(
+                "Invalid value for 'on_overtime'. Must be 'ignore', 'warning', or 'exception'."
+            )
         self.on_overtime = on_overtime
         self.start_time = (
             start_time if start_time is not None else _time()
@@ -215,7 +223,7 @@ class Interval:
             if self.on_overtime == "exception":
                 raise RuntimeError(message)
             elif self.on_overtime == "warning":
-                warnings.warn(message)
+                warnings.warn(message, RuntimeWarning)
             # If "ignore", do nothing
 
     def remaining(self) -> float:

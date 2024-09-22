@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Optional, Union, TYPE_CHECKING
 
 import pyglet
 from pyglet.app import EventLoop
@@ -6,11 +6,15 @@ from pyglet.window import Window as PygletWindow
 
 from .units import Units
 from ..utils import color_to_rgba
-from ..types import ColorType, UnitType
+
+if TYPE_CHECKING:
+    from ..types import ColorType, UnitType
 
 __all__ = ["Window", "get_window"]
 
 DEFAULT_WINDOW = None
+
+PygletWindow._enable_event_queue = False  # Disable the event queue for better performance
 
 
 def get_window() -> "Window":
@@ -32,10 +36,10 @@ def get_window() -> "Window":
     return DEFAULT_WINDOW
 
 
-class Window(PygletWindow):
+class Window:
     """
-    A custom Pyglet window class with additional functionality for handling units,
-    background color, and event management.
+    A custom class that wraps a Pyglet window, providing additional functionality for
+    handling units, background color, and event management.
 
     Parameters
     ----------
@@ -66,6 +70,8 @@ class Window(PygletWindow):
 
     Attributes
     ----------
+    window : PygletWindow
+        The internal Pyglet window instance.
     event_loop : EventLoop
         The event loop associated with the window.
     background_color : Optional[ColorType]
@@ -84,14 +90,15 @@ class Window(PygletWindow):
         fullscreen: bool = False,
         visible: bool = True,
         clear_after_flip: bool = True,
-        background_color: Optional[ColorType] = None,
+        background_color: Optional["ColorType"] = None,
         mouse_visible: bool = True,
         event_loop: Optional[EventLoop] = None,
         default_window: bool = True,
-        units: Union[UnitType, "Units"] = "normalized",
+        units: Union["UnitType", "Units"] = "normalized",
         **kwargs,
     ):
-        super().__init__(
+        # Instantiate the Pyglet window internally
+        self.window = PygletWindow(
             width=width,
             height=height,
             caption=caption,
@@ -105,12 +112,12 @@ class Window(PygletWindow):
         self.set_background_color(background_color)
         self.clear_after_flip = clear_after_flip
         if not mouse_visible:
-            self.set_mouse_visible(mouse_visible)
+            self.window.set_mouse_visible(mouse_visible)
 
-        self.dispatch_events()
+        self.window.dispatch_events()  # Ensure proper initialization
 
         if isinstance(units, str):
-            units = Units.from_name(units, self)
+            units = Units.from_name(units, self.window)
 
         self.units = units
 
@@ -118,7 +125,7 @@ class Window(PygletWindow):
             global DEFAULT_WINDOW
             DEFAULT_WINDOW = self
 
-    def set_background_color(self, color: Optional[ColorType]) -> None:
+    def set_background_color(self, color: Optional["ColorType"]) -> None:
         """
         Set the background color of the window.
 
@@ -132,7 +139,7 @@ class Window(PygletWindow):
         if color is not None:
             self.background_color = color
             pyglet.gl.glClearColor(*color)  # Set the OpenGL clear color
-            self.clear()  # Clear the window with the new background color
+            self.window.clear()  # Clear the window with the new background color
 
     def wait(self, timeout: float = 1):
         """
@@ -143,9 +150,9 @@ class Window(PygletWindow):
         timeout : float, default=1
             The time in seconds to wait.
         """
-        self.dispatch_events()
+        self.window.dispatch_events()
         self.event_loop.sleep(timeout)
-        self.dispatch_events()
+        self.window.dispatch_events()
 
     def flip(self, clear: Optional[bool] = None):
         """
@@ -157,8 +164,64 @@ class Window(PygletWindow):
             Whether to clear the window after flipping. Defaults to the value of
             `self.clear_after_flip`.
         """
-        super().flip()
+        self.window.flip()
 
         clear = clear if clear is not None else self.clear_after_flip
         if clear:
-            self.clear()
+            self.window.clear()
+
+    def close(self):
+        """
+        Close the window.
+        """
+        self.window.close()
+
+    @property
+    def width(self) -> int:
+        """Get the width of the window."""
+        return self.window.width
+
+    @width.setter
+    def width(self, value: int):
+        """Set the width of the window."""
+        self.window.set_size(value, self.window.height)
+
+    @property
+    def height(self) -> int:
+        """Get the height of the window."""
+        return self.window.height
+
+    @height.setter
+    def height(self, value: int):
+        """Set the height of the window."""
+        self.window.set_size(self.window.width, value)
+
+    @property
+    def caption(self) -> str:
+        """Get the caption (title) of the window."""
+        return self.window.caption
+
+    @caption.setter
+    def caption(self, value: str):
+        """Set the caption (title) of the window."""
+        self.window.set_caption(value)
+
+    @property
+    def fullscreen(self) -> bool:
+        """Get the fullscreen state of the window."""
+        return self.window.fullscreen
+
+    @fullscreen.setter
+    def fullscreen(self, value: bool):
+        """Set the fullscreen state of the window."""
+        self.window.set_fullscreen(value)
+
+    @property
+    def visible(self) -> bool:
+        """Get the visibility state of the window."""
+        return self.window.visible
+
+    @visible.setter
+    def visible(self, value: bool):
+        """Set the visibility state of the window."""
+        self.window.set_visible(value)

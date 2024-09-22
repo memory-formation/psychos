@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "psychos"
-description = "Library"
+description = "Package for creating experiments for behavioural research."
 requires-python = ">=3.8"
 license = {text = "MIT"}
 dynamic = ["version", "readme"]
@@ -14,6 +14,8 @@ dependencies = [
 ]
 authors = [
     {name="Dynamics of Memory Formation Group", email="llfuentemilla@ub.edu"},
+]
+maintainers = [
     {name="Pablo Marcos-Manchón", email="pmarcos@ub.edu"},
 ]
 keywords = [
@@ -32,13 +34,15 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.7",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 

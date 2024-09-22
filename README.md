@@ -13,6 +13,8 @@
 [![PyPI version](https://badge.fury.io/py/psychos.svg)](https://pypi.org/project/psychos/)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/psychos)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/memory-formation/psychos/blob/main/LICENSE)
+![Platform](https://img.shields.io/badge/platform-Windows%20|%20OS%20X%20|%20Linux-blue.svg)
+[![Based on](https://img.shields.io/badge/based%20on-Pyglet-orange.svg)](https://pyglet.org/)
 
 
 **Psychos** is a Python library for creating behavior experiments, ideal for fields like cognitive neuroscience where precise timing is essential.

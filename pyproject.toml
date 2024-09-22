@@ -9,7 +9,6 @@ requires-python = ">=3.8"
 license = {text = "MIT"}
 dynamic = ["version", "readme"]
 dependencies = [
-    "lazy_loader",
     "webcolors>=1.11",
     "pyglet",
 ]

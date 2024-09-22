@@ -7,23 +7,26 @@ directory for full license terms.
 (C) 2024 DMF Research Lab. All rights reserved.
 """
 
-from .__version__ import __version__
-
 from typing import TYPE_CHECKING
-import lazy_loader as lazy
 
-__all__ = ["__version__", "visual", "utils", "Window", "Text"]
+from .__version__ import __version__
+from .utils.lazy import attach
+
 
 submodules = ["visual", "utils"]
 submod_attrs = {
-    "visual": ["Window", "Text"],
+    "visual": ["Window", "get_window", "Text"],
 }
 
-__getattr__, __dir__, __all__ = lazy.attach(
+__getattr__, __dir__, __all__ = attach(
     __name__, submodules=submodules, submod_attrs=submod_attrs
 )
 
+__all__ += ["__version__"]
+
 if TYPE_CHECKING:
+    __all__ = ["__version__", "visual", "utils", "Window", "Text"]
+
     from . import visual
     from . import utils
 

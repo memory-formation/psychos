@@ -41,36 +41,44 @@ class Window(PygletWindow):
     Parameters
     ----------
     width : Optional[int], default=None
-        The width of the window in pixels.
+        The width of the window in pixels or another unit type. If None, the default width is used.
     height : Optional[int], default=None
-        The height of the window in pixels.
+        The height of the window in pixels or another unit type. If None, the default height is used.
     caption : Optional[str], default=None
         The caption or title of the window.
     fullscreen : bool, default=False
         Whether the window should be displayed in fullscreen mode.
     visible : bool, default=True
         Whether the window is visible upon creation.
-    clear_after_flip : bool, default=True
-        Whether the window should be cleared after flipping the frame buffer.
     background_color : Optional[ColorType], default=None
-        The background color of the window.
-    mouse_visible : bool, default=True
+        The background color of the window as an RGB or RGBA tuple, or a string representing a named color.
+    mouse_visible : bool, default=False
         Whether the mouse cursor should be visible in the window.
-    default_window : bool, default=True
-        Whether this window should be set as the default window globally.
-    units : Union[UnitType, Unit], default="normalized"
-        The unit system to be used in the window. Can be a string or a Unit object.
+    units : Union[UnitType, Unit], default="norm"
+        The unit system to be used in the window. Can be a string or a Unit object to define how coordinates and sizes are managed.
+    distance : Optional[float], default=50
+        The viewing distance of the window in centimeters, used to calculate visual angles (e.g., degrees).
+    inches : Optional[float], default=None
+        The diagonal size of the monitor in inches. This is required for accurate DPI (dots per inch) and physical size calculations.
+    clear_after_flip : bool, default=True
+        Whether the window should be cleared after flipping the frame buffer, preparing it for the next frame.
     kwargs : dict
         Additional keyword arguments passed to the Pyglet window constructor.
 
     Attributes
     ----------
-    background_color : Optional[ColorType]
-        The background color of the window.
+    distance : float
+        The distance from the viewer to the screen in centimeters, used for certain units like degrees of visual angle.
+    inches : float
+        The diagonal size of the monitor in inches, used to compute DPI.
     clear_after_flip : bool
-        Whether the window should clear its content after each flip.
+        Whether the window will be cleared automatically after each frame flip.
     units : Unit
-        The unit system used for transforming coordinates in the window.
+        The current unit system for the window, used to convert between different coordinate and size units.
+    background_color : Optional[ColorType]
+        The background color of the window, stored as an RGBA tuple.
+    dpi : float
+        The calculated dots per inch (DPI) of the screen based on the monitor's diagonal size.
     """
 
     def __init__(
@@ -84,6 +92,7 @@ class Window(PygletWindow):
         mouse_visible: bool = False,
         units: Union["UnitType", "Unit"] = "norm",
         distance: Optional[float] = 50,
+        inches: Optional[float] = None,
         clear_after_flip: bool = True,
         **kwargs,
     ):
@@ -95,6 +104,7 @@ class Window(PygletWindow):
         )
 
         self.distance = distance
+        self.inches = inches
         if not self.fullscreen and height is not None:
             self.height = parse_height(height, window=self)
         if not self.fullscreen and width is not None:
@@ -116,10 +126,34 @@ class Window(PygletWindow):
             The background color as a tuple (r, g, b, a) or a color name.
         """
         self.background_color = color_to_rgba(color)
-        print(self.background_color)
         if self.background_color is not None:
             pyglet.gl.glClearColor(*self.background_color)  # Set the OpenGL clear color
             self.clear()  # Clear the window with the new background color
+
+    @property
+    def dpi(self) -> float:
+        """
+        Get the number of pixels per centimeter in the window, computed from the monitor's diagonal size in inches.
+
+        Returns
+        -------
+        float
+            The number of pixels per centimeter.
+        """
+        if not self.inches:
+            raise ValueError(
+                "The diagonal size in inches must be set to calculate DPI. "
+                "Specify `inches` to the window constructor."
+            )
+
+        # Calculate diagonal resolution in pixels
+        diagonal_pixels = (self.screen.width**2 + self.screen.height**2) ** 0.5
+
+        # Calculate pixels per inch (DPI)
+        dpi = diagonal_pixels / self.inches
+
+        # Convert DPI to pixels per centimeter
+        return dpi
 
     def wait(
         self, duration: float = 1, sleep_interval: float = 0.8, hog_period: float = 0.02

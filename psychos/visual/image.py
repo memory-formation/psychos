@@ -4,7 +4,7 @@ from pyglet.sprite import Sprite
 from pyglet.image import load
 
 from .window import get_window
-from .units import Unit
+from .units import Unit, parse_height, parse_width
 
 if TYPE_CHECKING:
     from ..visual.window import Window
@@ -130,6 +130,9 @@ class Image(Sprite):
         else:
             self.units = Unit.from_name(units, window=self.window)
         x, y = self.units.transform(*position)
+
+        width = parse_width(width, window=self.window)
+        height = parse_height(height, window=self.window)
 
         # Load the image from the given path
         image = load(filename=image_path)

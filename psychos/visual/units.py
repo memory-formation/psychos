@@ -404,7 +404,7 @@ class CMUnit(Unit):
         """
         Calculate pixels per centimeter based on the current screen DPI.
         """
-        return self.window.screen.dpi / 2.54
+        return self.window.dpi / 2.54  # 1 inch = 2.54 cm
 
     def transform(self, x: float, y: float) -> Tuple[int, int]:
         x_pixel = int(x * self.pixels_per_cm)
@@ -446,7 +446,7 @@ class MMUnit(Unit):
         """
         Calculate pixels per millimeter based on the current screen DPI.
         """
-        return self.window.screen.dpi / 25.4  # 1 inch = 25.4 mm
+        return self.window.dpi / 25.4  # 1 inch = 25.4 mm
 
     def transform(self, x: float, y: float) -> Tuple[int, int]:
         x_pixel = int(x * self.pixels_per_mm)
@@ -486,7 +486,7 @@ class INUnit(Unit):
         """
         Get the current screen DPI.
         """
-        return self.window.screen.dpi
+        return self.window.dpi
 
     def transform(self, x: float, y: float) -> Tuple[int, int]:
         x_pixel = int(x * self.dpi)
@@ -528,7 +528,7 @@ class PTUnit(Unit):
         """
         Calculate pixels per point based on the current screen DPI.
         """
-        return self.window.screen.dpi / 72  # 1pt = 1/72 inch
+        return self.window.dpi / 72  # 1pt = 1/72 inch
 
     def transform(self, x: float, y: float) -> Tuple[int, int]:
         x_pixel = int(x * self.pixels_per_pt)
@@ -571,7 +571,7 @@ class DegUnit(Unit):
         """
         Calculate pixels per centimeter based on the current screen DPI.
         """
-        return self.window.screen.dpi / 2.54  # Convert DPI to pixels per cm
+        return self.window.dpi / 2.54  # 1 inch = 2.54 cm
 
     @property
     def distance_cm(self) -> float:

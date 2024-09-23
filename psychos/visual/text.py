@@ -3,7 +3,7 @@ from typing import Optional, Union, TYPE_CHECKING
 from pyglet.text import Label
 
 from ..utils import color_to_rgba_int
-from .units import Units
+from .units import Unit
 from .window import get_window
 
 if TYPE_CHECKING:
@@ -64,7 +64,7 @@ class Text(Label):
         color: Optional["ColorType"] = None,
         anchor_x: "AnchorHorizontal" = "center",
         anchor_y: "AnchorVertical" = "center",
-        window: Optional["Window"] = None,
+        align: "AnchorHorizontal" = "center",
         rotation: float = 0,
         multiline: bool = False,
         font_name: Optional[str] = None,
@@ -72,23 +72,18 @@ class Text(Label):
         bold: bool = False,
         italic: bool = False,
         stretch: bool = False,
-        align: "AnchorHorizontal" = "center",
-        coordinate_units: Optional[Union["UnitType", "Units"]] = None,
+        window: Optional["Window"] = None,
+        units: Optional[Union["UnitType", "Unit"]] = None,
         **kwargs,
     ):
         # Retrieve window and set coordinate system
         self.window = window or get_window()
-
-        if coordinate_units is not None:
-            if isinstance(coordinate_units, str):
-                coordinate_units = Units.from_name(coordinate_units, self.window)
+        if units is None:
+            self.units = self.window.units
         else:
-            coordinate_units = self.window.units
-
-        self.coordinate_units = coordinate_units
-
-        # Convert position using coordinate units
-        x, y = self.coordinate_units(*position)
+            self.units = Unit.from_name(units, window=self.window)
+            
+        x, y = self.units.transform(*position)
 
         # Convert color to RGBA
         color = (255, 255, 255, 255) if color is None else color_to_rgba_int(color)

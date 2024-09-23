@@ -3,7 +3,7 @@ from typing import Optional, Union, TYPE_CHECKING
 import pyglet
 from pyglet.window import Window as PygletWindow
 
-from .units import Units
+from .units import Unit, parse_height, parse_width
 from ..utils import color_to_rgba
 from ..core.time import wait
 
@@ -58,8 +58,8 @@ class Window(PygletWindow):
         Whether the mouse cursor should be visible in the window.
     default_window : bool, default=True
         Whether this window should be set as the default window globally.
-    units : Union[UnitType, Units], default="normalized"
-        The unit system to be used in the window. Can be a string or a Units object.
+    units : Union[UnitType, Unit], default="normalized"
+        The unit system to be used in the window. Can be a string or a Unit object.
     kwargs : dict
         Additional keyword arguments passed to the Pyglet window constructor.
 
@@ -69,7 +69,7 @@ class Window(PygletWindow):
         The background color of the window.
     clear_after_flip : bool
         Whether the window should clear its content after each flip.
-    units : Units
+    units : Unit
         The unit system used for transforming coordinates in the window.
     """
 
@@ -80,31 +80,30 @@ class Window(PygletWindow):
         caption: Optional[str] = None,
         fullscreen: bool = False,
         visible: bool = True,
-        clear_after_flip: bool = True,
         background_color: Optional["ColorType"] = None,
         mouse_visible: bool = False,
-        units: Union["UnitType", "Units"] = "normalized",
+        units: Union["UnitType", "Unit"] = "norm",
+        distance: Optional[float] = 50,
+        clear_after_flip: bool = True,
         **kwargs,
     ):
         super().__init__(
-            width=width,
-            height=height,
             caption=caption,
             fullscreen=fullscreen,
             visible=visible,
             **kwargs,
         )
 
+        self.distance = distance
+        if not self.fullscreen and height is not None:
+            self.height = parse_height(height, window=self)
+        if not self.fullscreen and width is not None:
+            self.width = parse_width(width, window=self)
         self.clear_after_flip = clear_after_flip
-        self.background_color = None
+
+        self.units = Unit.from_name(units, window=self)
         self.set_background_color(background_color)
-        if not mouse_visible:
-            self.set_mouse_visible(mouse_visible)
-        if isinstance(units, str):
-            units = Units.from_name(units, self)
-
-        self.units = units
-
+        self.set_mouse_visible(mouse_visible)
         self.dispatch_events()
 
     def set_background_color(self, color: Optional["ColorType"]) -> None:
@@ -116,11 +115,10 @@ class Window(PygletWindow):
         color : Optional[ColorType]
             The background color as a tuple (r, g, b, a) or a color name.
         """
-        color = color_to_rgba(color)
-
-        if color is not None:
-            self.background_color = color
-            pyglet.gl.glClearColor(*color)  # Set the OpenGL clear color
+        self.background_color = color_to_rgba(color)
+        print(self.background_color)
+        if self.background_color is not None:
+            pyglet.gl.glClearColor(*self.background_color)  # Set the OpenGL clear color
             self.clear()  # Clear the window with the new background color
 
     def wait(

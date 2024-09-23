@@ -4,7 +4,7 @@ from pyglet.sprite import Sprite
 from pyglet.image import load
 
 from .window import get_window
-from .units import Units
+from .units import Unit
 
 if TYPE_CHECKING:
     from ..visual.window import Window
@@ -118,22 +118,18 @@ class Image(Sprite):
         anchor_x: "AnchorHorizontal" = "center",
         anchor_y: "AnchorVertical" = "center",
         window: Optional["Window"] = None,
-        coordinate_units: Optional[Union["UnitType", "Units"]] = None,
+        units: Optional[Union["UnitType", "Unit"]] = None,
         **kwargs,
     ):
         # Retrieve the window and set coordinate system
         self.window = window or get_window()
 
-        if coordinate_units is not None:
-            if isinstance(coordinate_units, str):
-                coordinate_units = Units.from_name(coordinate_units, self.window)
+        # Initialize and transform the position
+        if units is None:
+            self.units = self.window.units
         else:
-            coordinate_units = self.window.units
-
-        self.coordinate_units = coordinate_units
-
-        # Convert position using coordinate units
-        x, y = self.coordinate_units(*position)
+            self.units = Unit.from_name(units, window=self.window)
+        x, y = self.units.transform(*position)
 
         # Load the image from the given path
         image = load(filename=image_path)

@@ -94,12 +94,19 @@ class Window(PygletWindow):
         distance: Optional[float] = 50,
         inches: Optional[float] = None,
         clear_after_flip: bool = True,
+        screen: Optional[Union["pyglet.canvas.Screen", int]] = None,
         **kwargs,
     ):
+
+        if isinstance(screen, int):
+            display = pyglet.canvas.get_display()
+            screen = display.get_screens()[screen]
+            
         super().__init__(
             caption=caption,
             fullscreen=fullscreen,
             visible=visible,
+            screen=screen,
             **kwargs,
         )
 

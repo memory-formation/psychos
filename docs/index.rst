@@ -22,6 +22,10 @@
    :target: https://pypi.org/project/psychos/
    :alt: PyPI version
 
+.. image:: https://readthedocs.org/projects/psychos/badge/?version=latest
+    :target: https://psychos.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
 .. image:: https://img.shields.io/pypi/pyversions/psychos
    :target: https://pypi.org/project/psychos/
    :alt: PyPI - Python Version

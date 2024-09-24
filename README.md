@@ -11,6 +11,7 @@
 ------
 
 [![PyPI version](https://badge.fury.io/py/psychos.svg)](https://pypi.org/project/psychos/)
+[![Documentation Status](https://readthedocs.org/projects/psychos/badge/?version=latest)](https://psychos.readthedocs.io/en/latest/?badge=latest)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/psychos)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/memory-formation/psychos/blob/main/LICENSE)
 ![Platform](https://img.shields.io/badge/platform-Windows%20|%20OS%20X%20|%20Linux-blue.svg)

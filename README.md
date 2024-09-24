@@ -30,6 +30,10 @@ You can install **Psychos** with pip:
 pip install psychos
 ```
 
+## Documentation
+
+For full documentation, visit [Read the Docs](https://psychos.readthedocs.io/en/latest/).
+
 ## Issues
 
 If you encounter any issues or have suggestions for improvements, please [open an issue](https://github.com/memory-formation/psychos/issues) on GitHub. We greatly value your feedback and contributions to make **Psychos** better!

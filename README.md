@@ -15,15 +15,13 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/memory-formation/psychos/blob/main/LICENSE)
 ![Platform](https://img.shields.io/badge/platform-Windows%20|%20OS%20X%20|%20Linux-blue.svg)
 [![Based on](https://img.shields.io/badge/based%20on-Pyglet-orange.svg)](https://pyglet.org/)
+[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+
+**Psychos** is a modern, lightweight Python library for creating precise, timing-sensitive behavioral experiments—designed for cognitive neuroscience and related fields. 
+Built for ease of use, the library simplifies the coding process, allowing researchers to create experiments with clear and readable code.
 
 
-**Psychos** is a Python library for creating behavior experiments, ideal for fields like cognitive neuroscience where precise timing is essential.
-
-Designed with compatibility in mind, **Psychos** is easy to install on various systems and keeps experiment design simple.
-
-Inspired by PsychoPy, it offers an easy learning curve and straightforward migration for existing projects, especially for those who prefer coding directly in Python.
-
-## Quick Start
+## Installation
 
 You can install **Psychos** with pip:
 
@@ -33,7 +31,7 @@ pip install psychos
 
 ## Issues
 
-If you encounter any issues or have suggestions for improvements, please [open an issue](https://github.com/yourusername/psychos/issues) on GitHub. We greatly value your feedback and contributions to make Psychos better!
+If you encounter any issues or have suggestions for improvements, please [open an issue](https://github.com/memory-formation/psychos/issues) on GitHub. We greatly value your feedback and contributions to make **Psychos** better!
 
 ## Contributing
 

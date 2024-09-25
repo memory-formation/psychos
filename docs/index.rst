@@ -53,11 +53,15 @@ experiments—designed for cognitive neuroscience and related fields.
 Built for ease of use, the library simplifies the coding process, 
 allowing researchers to create experiments with clear and readable code.
 
-.. .. .. toctree::
-.. ..    :maxdepth: 2
-.. ..    :caption: Content
+Content
+-------
 
-.. ..    installation
+.. toctree::
+   :maxdepth: 1
+
+   content/installation.rst
+   content/modules.rst
+   content/license
 
 Installation
 ------------
@@ -85,7 +89,7 @@ please open an issue or submit a pull request on GitHub. We welcome contribution
 License
 -------
 
-**Psychos** is licensed under the MIT License. See the `LICENSE <LICENSE>`_ file for more details.
+**Psychos** is licensed under the MIT License. See the :doc:`content/license`  file for more details.
 
 Indices and tables
 ------------------

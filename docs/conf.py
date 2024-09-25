@@ -94,4 +94,4 @@ html_context = {
     "doc_path": "docs",
 }
 
-# html_sidebars = {"installation": []}
+html_sidebars = {"content/license": []}

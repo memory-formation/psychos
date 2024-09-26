@@ -9,6 +9,11 @@ TIME_TOLERANCE = 0.01  # 1%
 def is_close(actual, expected, tolerance):
     return abs(actual - expected) <= tolerance * expected
 
+def dummy_sleep(duration):
+    """Accurate sleep function using busy waiting for accuracy in testing."""
+    start_time = time.time()
+    while time.time() - start_time < duration:
+        pass
 
 # Test suite for the 'wait' function
 def test_wait_function():
@@ -25,7 +30,7 @@ def test_wait_function():
 # Test suite for the 'Clock' class
 def test_clock_time_method():
     clock = Clock()
-    time.sleep(1)
+    dummy_sleep(1)
     elapsed = clock.time()
     assert is_close(
         elapsed, 1, TIME_TOLERANCE
@@ -34,9 +39,9 @@ def test_clock_time_method():
 
 def test_clock_reset_method():
     clock = Clock()
-    time.sleep(1)
+    dummy_sleep(1)
     clock.reset()
-    time.sleep(1)
+    dummy_sleep(1)
     elapsed = clock.time()
     assert is_close(
         elapsed, 1, TIME_TOLERANCE
@@ -82,7 +87,7 @@ def test_interval_wait_within_duration():
 def test_interval_wait_overtime_ignore():
     duration = 1  # seconds
     interval = Interval(duration, on_overtime="ignore")
-    time.sleep(2)  # Exceed the interval
+    dummy_sleep(2)  # Exceed the interval
     start_time = time.time()
     interval.wait()  # Should not raise an error or warning
     end_time = time.time()
@@ -96,7 +101,7 @@ def test_interval_wait_overtime_ignore():
 def test_interval_wait_overtime_warning():
     duration = 1  # seconds
     interval = Interval(duration, on_overtime="warning")
-    time.sleep(2)  # Exceed the interval
+    dummy_sleep(2)  # Exceed the interval
     with pytest.warns(RuntimeWarning, match="The interval of"):
         interval.wait()
 
@@ -104,7 +109,7 @@ def test_interval_wait_overtime_warning():
 def test_interval_wait_overtime_exception():
     duration = 1  # seconds
     interval = Interval(duration, on_overtime="exception")
-    time.sleep(2)  # Exceed the interval
+    dummy_sleep(2)  # Exceed the interval
     with pytest.raises(RuntimeError, match="The interval of"):
         interval.wait()
 
@@ -158,7 +163,7 @@ def test_interval_inplace_arithmetic_methods():
 def test_interval_context_manager():
     duration = 2  # seconds
     with Interval(duration) as interval:
-        time.sleep(1)
+        dummy_sleep(1)
     total_time = time.time() - interval.start_time
     assert is_close(
         total_time, duration, TIME_TOLERANCE
@@ -167,7 +172,7 @@ def test_interval_context_manager():
 
 def test_interval_remaining_method():
     interval = Interval(2)
-    time.sleep(1)
+    dummy_sleep(1)
     remaining = interval.remaining()
     assert is_close(
         remaining, 1, TIME_TOLERANCE

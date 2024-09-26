@@ -5,6 +5,8 @@ from psychos.core import Clock, Interval, wait
 
 
 TIME_TOLERANCE = 0.01  # 1%
+HOG_PERIOD = 0.3  # seconds
+
 
 def is_close(actual, expected, tolerance):
     return abs(actual - expected) <= tolerance * expected
@@ -19,7 +21,7 @@ def dummy_sleep(duration):
 def test_wait_function():
     duration = 2  # seconds
     start_time = time.time()
-    wait(duration)
+    wait(duration, hog_period=HOG_PERIOD)
     end_time = time.time()
     elapsed_time = end_time - start_time
     assert is_close(
@@ -74,7 +76,7 @@ def test_clock_with_invalid_fmt():
 # Test suite for the 'Interval' class
 def test_interval_wait_within_duration():
     duration = 2  # seconds
-    interval = Interval(duration)
+    interval = Interval(duration, hog_period=HOG_PERIOD)
     start_time = time.time()
     interval.wait()
     end_time = time.time()
@@ -86,7 +88,7 @@ def test_interval_wait_within_duration():
 
 def test_interval_wait_overtime_ignore():
     duration = 1  # seconds
-    interval = Interval(duration, on_overtime="ignore")
+    interval = Interval(duration, on_overtime="ignore", hog_period=HOG_PERIOD)
     dummy_sleep(2)  # Exceed the interval
     start_time = time.time()
     interval.wait()  # Should not raise an error or warning
@@ -100,7 +102,7 @@ def test_interval_wait_overtime_ignore():
 # @pytest.mark.filterwarnings("ignore:.*")
 def test_interval_wait_overtime_warning():
     duration = 1  # seconds
-    interval = Interval(duration, on_overtime="warning")
+    interval = Interval(duration, on_overtime="warning", hog_period=HOG_PERIOD)
     dummy_sleep(2)  # Exceed the interval
     with pytest.warns(RuntimeWarning, match="The interval of"):
         interval.wait()
@@ -108,7 +110,7 @@ def test_interval_wait_overtime_warning():
 
 def test_interval_wait_overtime_exception():
     duration = 1  # seconds
-    interval = Interval(duration, on_overtime="exception")
+    interval = Interval(duration, on_overtime="exception", hog_period=HOG_PERIOD)
     dummy_sleep(2)  # Exceed the interval
     with pytest.raises(RuntimeError, match="The interval of"):
         interval.wait()
@@ -162,7 +164,7 @@ def test_interval_inplace_arithmetic_methods():
 
 def test_interval_context_manager():
     duration = 2  # seconds
-    with Interval(duration) as interval:
+    with Interval(duration, hog_period=HOG_PERIOD) as interval:
         dummy_sleep(1)
     total_time = time.time() - interval.start_time
     assert is_close(
@@ -171,7 +173,7 @@ def test_interval_context_manager():
 
 
 def test_interval_remaining_method():
-    interval = Interval(2)
+    interval = Interval(2, hog_period=HOG_PERIOD)
     dummy_sleep(1)
     remaining = interval.remaining()
     assert is_close(

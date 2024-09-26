@@ -13,7 +13,7 @@ from .__version__ import __version__
 from .utils.lazy import attach
 
 
-submodules = ["visual", "utils"]
+submodules = ["visual", "utils", "core"]
 submod_attrs = {
     "visual": ["Window", "get_window", "Text", "Image"],
 }
@@ -25,9 +25,10 @@ __getattr__, __dir__, __all__ = attach(
 __all__ += ["__version__"]
 
 if TYPE_CHECKING:
-    __all__ = ["__version__", "visual", "utils", "Window", "Text", "Image"]
+    __all__ = ["__version__", "visual", "utils", "core", "Window", "Text", "Image"]
 
     from . import visual
     from . import utils
+    from . import core
 
     from .visual import Window, Text, Image

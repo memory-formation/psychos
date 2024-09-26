@@ -47,17 +47,10 @@ class Image(Sprite):
 
     Attributes
     ----------
-    position : tuple[float, float]
-        The (x, y) coordinates of the image in the window.
     rotation : float
         The rotation of the image in degrees.
     scale : float
         The scale factor of the image. If both width and height are provided, this will be a tuple of (scale_x, scale_y).
-
-    Methods
-    -------
-    draw()
-        Draw the image on the window.
 
     Examples
     --------

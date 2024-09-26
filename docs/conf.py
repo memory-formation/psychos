@@ -40,7 +40,13 @@ extensions = [
 ]
 
 
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = [
+    "_build",
+    "Thumbs.db",
+    ".DS_Store",
+    "autosummary/psychos.*.*.*.rst",  # 3 levels of depth
+    "autosummary/psychos.*.rst",
+]
 
 # Add mappings
 intersphinx_mapping = {
@@ -49,9 +55,12 @@ intersphinx_mapping = {
 }
 autodoc_default_options = {
     "members": True,
-    "inherited-members": True,
-    "show-inheritance": True,
+    "undoc-members": True,
+    "inherited-members": False,
+    "show-inheritance": False,
 }
+autosummary_generate = True
+
 
 language = "en"
 

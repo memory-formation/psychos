@@ -1,3 +1,4 @@
+"""psychos.utils: Module for utility functions and classes."""
 from typing import TYPE_CHECKING
 
 from .lazy import attach

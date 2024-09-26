@@ -53,6 +53,41 @@ def wait(duration: float, sleep_interval: float = 0.8, hog_period: float = 0.02)
 
 
 class Clock:
+    """
+    A class to represent a simple clock that tracks elapsed time.
+
+    The `Clock` class allows for tracking time intervals, with options to format the output as raw seconds, 
+    a formatted string using `strftime`, or a custom callable to process the elapsed time.
+
+    Parameters
+    ----------
+    start_time : Optional[float], default=None
+        The initial time from which the clock starts counting. If None, the current time is used.
+    fmt : Optional[Union[Callable, str]], default=None
+        Defines how the elapsed time is returned:
+        - If None, returns the elapsed time as a float in seconds.
+        - If a string, the elapsed time is returned formatted according to `datetime.strftime` conventions.
+        - If a callable, the callable is applied to the elapsed time, and its result is returned.
+
+    Examples
+    --------
+    Basic usage with no formatting:
+
+    >>> clock = Clock()  # Starts the clock with the current time
+    >>> elapsed = clock.time()  # Returns the elapsed time in seconds as a float
+    >>> clock.reset()  # Resets the clock’s start time to the current time
+
+    Using a formatted string to represent elapsed time:
+
+    >>> clock_fmt = Clock(fmt="%H:%M:%S")  # Format elapsed time as hours, minutes, and seconds
+    >>> formatted_time = clock_fmt.time()  # Returns the elapsed time as a formatted string
+
+    Using a custom callable to format elapsed time:
+
+    >>> clock_callable = Clock(fmt=lambda x: f"{int(x)} seconds have passed.")
+    >>> custom_time = clock_callable.time()  # Returns elapsed time processed by the callable
+
+    """
     def __init__(
         self,
         start_time: Optional[float] = None,
@@ -61,20 +96,24 @@ class Clock:
         """
         Initialize the Clock.
 
-        Parameters:
-        - start_time (float, optional): The time from which the clock starts counting.
-                                        If None, it takes the current time.
-        - fmt (Union[Callable, str, None]): The format of the output. If None, the result will be the elapsed time in seconds.
-                                            If a string, it will be formatted using datetime.strftime.
-                                            If a callable, the callable will process the elapsed time.
+        Parameters
+        ----------
+        start_time : float, optional
+            The time from which the clock starts counting. If None, it takes the current time.
+        fmt : Union[Callable, str, None]
+            The format of the output. If None, the result will be the elapsed time in seconds.
+            If a string, it will be formatted using `datetime.strftime`.
+            If a callable, the callable will process the elapsed time.
 
-        Example usage:
+        Example usage
+        -------------
         >>> clock = Clock()  # Starts clock with current time
         >>> clock.time()  # Returns elapsed time in seconds
         >>> clock.reset()  # Resets the clock's start time to now
         >>> clock_fmt = Clock(fmt="%H:%M:%S")
         >>> clock_fmt.time()  # Returns elapsed time formatted as HH:MM:SS
         """
+        
         self.start_time = start_time if start_time is not None else _time()
         self.fmt = fmt
 
@@ -86,7 +125,7 @@ class Clock:
         -------
         Union[float, str]
             - If `fmt` is None, returns the time as a float representing seconds.
-            - If `fmt` is a string, returns the time formatted according to datetime conventions.
+            - If `fmt` is a string, returns the time formatted according to `strftime` conventions.
             - If `fmt` is a callable, applies the callable to the elapsed time.
 
         Raises
@@ -94,8 +133,8 @@ class Clock:
         TypeError
             If `fmt` is not None, a string, or a callable.
 
-        Example
-        -------
+        Examples
+        --------
         >>> clock = Clock()
         >>> clock.time()  # Returns elapsed time in seconds as a float
 
@@ -121,7 +160,8 @@ class Clock:
         """
         Resets the start time to the current time.
 
-        Example:
+        Example
+        -------
         >>> clock = Clock()
         >>> clock.reset()  # Resets the starting point of the clock
         """

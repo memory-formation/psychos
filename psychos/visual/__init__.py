@@ -1,3 +1,5 @@
+"""psychos.visual: Module for creating visual elements in a Pyglet window."""
+
 from typing import TYPE_CHECKING
 
 from ..utils.lazy import attach

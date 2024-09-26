@@ -26,4 +26,4 @@ docs: html
 # Clean build directory and autosummary folder
 clean:
 	@$(SPHINXBUILD) -M clean "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
-	rm -rf modules/autosummary _build
+	rm -rf content/autosummary _build

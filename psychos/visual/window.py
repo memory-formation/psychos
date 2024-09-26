@@ -35,52 +35,91 @@ def get_window() -> "Window":
 
 class Window(PygletWindow):
     """
-    A custom Pyglet window class with additional functionality for handling units,
-    background color, and event management.
+    Custom window for displaying visual elements.
+
+    A subclass of `pyglet.window.Window`, this class provides additional functionality
+    for handling units, background color, and event management, while maintaining full compatibility with the `pyglet` library. For more information on `pyglet`, refer to the official documentation.
 
     Parameters
     ----------
     width : Optional[int], default=None
-        The width of the window in pixels or another unit type. If None, the default width is used.
+        The width of the window in pixels or another unit type. If None, a default width is used.
     height : Optional[int], default=None
-        The height of the window in pixels or another unit type. If None, the default height is used.
+        The height of the window in pixels or another unit type. If None, a default height is used.
     caption : Optional[str], default=None
-        The caption or title of the window.
+        The caption or title of the window. If None, no caption is displayed.
     fullscreen : bool, default=False
-        Whether the window should be displayed in fullscreen mode.
+        Indicates if the window should be displayed in fullscreen mode.
     visible : bool, default=True
-        Whether the window is visible upon creation.
+        Specifies whether the window is visible upon creation.
     background_color : Optional[ColorType], default=None
-        The background color of the window as an RGB or RGBA tuple, or a string representing a named color.
+        The background color of the window, provided as an RGB/RGBA tuple or a named color string. If None, the default color is used.
     mouse_visible : bool, default=False
-        Whether the mouse cursor should be visible in the window.
+        Determines if the mouse cursor should be visible within the window.
     units : Union[UnitType, Unit], default="norm"
-        The unit system to be used in the window. Can be a string or a Unit object to define how coordinates and sizes are managed.
+        The unit system for the window. Can be a string or a Unit object to manage coordinates and sizes.
     distance : Optional[float], default=50
-        The viewing distance of the window in centimeters, used to calculate visual angles (e.g., degrees).
+        The viewing distance from the screen in centimeters, used for visual angle calculations (e.g., degrees).
     inches : Optional[float], default=None
-        The diagonal size of the monitor in inches. This is required for accurate DPI (dots per inch) and physical size calculations.
+        The diagonal size of the monitor in inches. Required for accurate DPI (dots per inch) and physical size calculations.
     clear_after_flip : bool, default=True
-        Whether the window should be cleared after flipping the frame buffer, preparing it for the next frame.
+        If True, the window will be cleared after flipping the frame buffer, preparing it for the next frame.
     kwargs : dict
-        Additional keyword arguments passed to the Pyglet window constructor.
+        Additional keyword arguments to be passed to the Pyglet window constructor.
 
     Attributes
     ----------
     distance : float
-        The distance from the viewer to the screen in centimeters, used for certain units like degrees of visual angle.
+        The viewing distance in centimeters, used for units like degrees of visual angle.
     inches : float
-        The diagonal size of the monitor in inches, used to compute DPI.
+        The diagonal size of the monitor in inches, used for DPI calculations.
     clear_after_flip : bool
-        Whether the window will be cleared automatically after each frame flip.
+        Whether the window is automatically cleared after each frame flip.
     units : Unit
-        The current unit system for the window, used to convert between different coordinate and size units.
+        The current unit system used to convert between different coordinate and size units.
     background_color : Optional[ColorType]
         The background color of the window, stored as an RGBA tuple.
-    dpi : float
-        The calculated dots per inch (DPI) of the screen based on the monitor's diagonal size.
-    """
 
+    Examples
+    --------
+    Basic usage for displaying visual elements:
+
+    .. code-block:: python
+
+        from psychos import Window, Text
+
+        # Create a new window
+        window = Window()
+
+        # Create a text stimulus and draw it
+        text = Text("Hello, World!").draw()
+
+        # Display the drawn elements on the screen
+        window.flip()
+
+        # Keep the window open for 3 seconds
+        window.wait(3)
+
+    You can also display other elements like images:
+
+    .. code-block:: python
+
+        from psychos import Window, Image
+        from pathlib import Path
+
+        # Create a new window
+        window = Window()
+
+        # Load and draw an image
+        img_path = Path("image.png")
+        image = Image(img_path).draw()
+
+        # Flip the window to display the drawn elements
+        window.flip()
+
+        # Keep the window open for 3 seconds
+        window.wait(3)
+    """
     def __init__(
         self,
         width: Optional[int] = None,
@@ -97,6 +136,7 @@ class Window(PygletWindow):
         screen: Optional[Union["pyglet.canvas.Screen", int]] = None,
         **kwargs,
     ):
+        """Creates an instance of the Window class."""
 
         if isinstance(screen, int):
             display = pyglet.canvas.get_display()

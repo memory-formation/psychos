@@ -59,8 +59,8 @@ Content
 .. toctree::
    :maxdepth: 1
 
-   content/installation.rst
-   content/modules.rst
+   content/installation
+   content/modules
    content/license
 
 Installation
@@ -91,8 +91,7 @@ License
 
 **Psychos** is licensed under the MIT License. See the :doc:`content/license`  file for more details.
 
-Indices and tables
-------------------
+Index
+-----
 
-* :ref:`search`
-* :ref:`genindex`
+For a complete overview of all available classes, functions, and modules in **Psychos**, please refer to the :ref:`genindex`. 

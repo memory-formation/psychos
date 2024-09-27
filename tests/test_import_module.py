@@ -1,6 +1,11 @@
 import importlib
 import pkgutil
 import pytest
+import os
+import platform
+
+if platform.system() == "Linux":
+    os.environ['PYOPENGL_PLATFORM'] = 'egl'
 
 # Test for all submodules inside psychos
 @pytest.mark.parametrize("module_name", [

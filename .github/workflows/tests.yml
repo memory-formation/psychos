@@ -37,6 +37,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Run headless test
+        uses: coactions/setup-xvfb@v1
+
       - name: Set up Python ${{ matrix.python-version }} on ${{ matrix.os }}
         uses: actions/setup-python@v5
         with:

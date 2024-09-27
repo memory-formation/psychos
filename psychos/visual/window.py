@@ -6,7 +6,7 @@ import pyglet
 from pyglet.window import Window as PygletWindow
 
 from .units import Unit, parse_height, parse_width
-from ..utils import color_to_rgba
+from ..utils import Color
 from ..core.time import wait
 
 if TYPE_CHECKING:
@@ -181,7 +181,7 @@ class Window(PygletWindow): # pylint: disable=abstract-method
         color : Optional[ColorType]
             The background color as a tuple (r, g, b, a) or a color name.
         """
-        self.background_color = color_to_rgba(color)
+        self.background_color = Color(color).to_rgba()
         if self.background_color is not None:
             pyglet.gl.glClearColor(*self.background_color)  # Set the OpenGL clear color
 

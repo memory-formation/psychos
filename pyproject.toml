@@ -9,8 +9,7 @@ requires-python = ">=3.8"
 license = {text = "MIT"}
 dynamic = ["version", "readme"]
 dependencies = [
-    "webcolors>=1.11",
-    "pyglet",
+    "pyglet"
 ]
 authors = [
     {name="Dynamics of Memory Formation Group", email="llfuentemilla@ub.edu"},

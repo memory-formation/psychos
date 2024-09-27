@@ -82,9 +82,9 @@ def attach(package_name, submodules=None, submod_attrs=None):
         attr: mod for mod, attrs in submod_attrs.items() for attr in attrs
     }
 
-    __all__ = sorted(
+    __all__ = sorted(  # pylint: disable=redefined-outer-name
         submodules | attr_to_modules.keys()
-    )  # pylint: disable=redefined-outer-name
+    )
 
     def __getattr__(name):
         if name in submodules:

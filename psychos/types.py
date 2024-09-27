@@ -19,10 +19,10 @@ PathStr = Union["str", "Path"]
 
 ColorType = Union[
     "str",
-    "Tuple[int, int, int]",
-    "Tuple[int, int, int, int]",
-    "Tuple[float, float, float]",
-    "Tuple[float, float, float, float]",
+    Tuple[int, int, int],
+    Tuple[int, int, int, int],
+    Tuple[float, float, float],
+    Tuple[float, float, float, float],
 ]
 
 # Anchor types for alignment

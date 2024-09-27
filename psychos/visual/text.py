@@ -3,7 +3,7 @@ from typing import Optional, Union, Tuple, TYPE_CHECKING
 
 from pyglet.text import Label
 
-from ..utils import color_to_rgba_int
+from ..utils import Color
 from .units import Unit, parse_height, parse_width
 from .window import get_window
 
@@ -90,7 +90,7 @@ class Text(Label):
         height = parse_height(height, window=self.window)
 
         # Convert color to RGBA
-        color = (255, 255, 255, 255) if color is None else color_to_rgba_int(color)
+        color = Color(color).to_rgba255() or (255, 255, 255, 255)
 
         # Initialize Label (superclass)
         super().__init__(

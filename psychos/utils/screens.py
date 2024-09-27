@@ -1,7 +1,8 @@
 """psychos.utils.screens: Utiliy function to get all available screens using pyglet."""
+from typing import List
 
 import pyglet
-from typing import List
+
 
 
 def get_screens() -> List["pyglet.canvas.Screen"]:

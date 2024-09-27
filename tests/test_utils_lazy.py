@@ -3,6 +3,7 @@ import sys
 import time
 from psychos.utils.lazy import attach
 
+
 # Simulate a package and submodules for the test
 @pytest.fixture
 def lazy_attach_setup():
@@ -11,7 +12,9 @@ def lazy_attach_setup():
     submodules = ["core"]
     submod_attrs = {"core": ["wait"]}
 
-    __getattr__, __dir__, __all__ = attach(package_name, submodules=submodules, submod_attrs=submod_attrs)
+    __getattr__, __dir__, __all__ = attach(
+        package_name, submodules=submodules, submod_attrs=submod_attrs
+    )
 
     yield __getattr__, __dir__, __all__
 
@@ -35,7 +38,7 @@ def test_lazy_import_time(lazy_attach_setup):
     """Test lazy import of the standard time.time function."""
     # Access the time.time function directly (no need for the lazy attach system)
     __getattr__, __dir__, __all__ = lazy_attach_setup
-    
+
     # Ensure that time is imported directly from the standard library
     assert "time" in sys.modules
 
@@ -61,6 +64,7 @@ def test_dir_method(lazy_attach_setup):
     # Check that all the attributes are listed properly
     assert "wait" in __dir__()
 
+
 def test_lazy_import_core_submodule(lazy_attach_setup):
     """Test lazy import of a submodule like psychos.core."""
     __getattr__, __dir__, __all__ = lazy_attach_setup
@@ -77,6 +81,7 @@ def test_lazy_import_core_submodule(lazy_attach_setup):
     # Ensure that it's the correct module
     assert core_module.__name__ == "psychos.core"
 
+
 def test_default_submod_attrs():
     """Test default value for submod_attrs when None is passed."""
     # Call attach without specifying submod_attrs (defaults to None)
@@ -90,6 +95,7 @@ def test_default_submod_attrs():
     assert isinstance(__all__, list)
     assert "core" in __all__
 
+
 def test_dir_function(lazy_attach_setup):
     """Test that __dir__ returns the correct __all__ list."""
     __getattr__, __dir__, __all__ = lazy_attach_setup
@@ -98,3 +104,20 @@ def test_dir_function(lazy_attach_setup):
     assert __dir__() == __all__
     assert "core" in __dir__()
     assert "wait" in __dir__()
+
+
+def test_conflict_name_attribute():
+    """Test that the attribute is assigned to the package's __dict__."""
+
+    # Define the package name and the attribute we want to attach
+    package_name = "psychos"
+    submod_attrs = {"__version__": ["__version__"]}
+
+    # Attach the attribute
+    __getattr__, __dir__, __all__ = attach(package_name, submod_attrs=submod_attrs)
+
+    # Access the attribute
+    version = __getattr__("__version__")
+
+    # Assert that version is a string
+    assert isinstance(version, str)

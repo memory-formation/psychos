@@ -91,7 +91,7 @@ class Unit(ABC):
 
         Returns
         -------
-        tuple[Union[int, float], Union[int, float]]
+        Tuple[Union[int, float], Union[int, float]]
             The transformed coordinates or size based on the chosen transformation.
         """
 
@@ -120,7 +120,7 @@ class Unit(ABC):
 
         Returns
         -------
-        tuple[int, int]
+        Tuple[int, int]
             The pixel coordinates.
         """
 
@@ -138,7 +138,7 @@ class Unit(ABC):
 
         Returns
         -------
-        tuple[float, float]
+        Tuple[float, float]
             The coordinates in the unit system.
         """
 
@@ -156,7 +156,7 @@ class Unit(ABC):
 
         Returns
         -------
-        tuple[int, int]
+        Tuple[int, int]
             The width and height in pixel values.
         """
 
@@ -174,7 +174,7 @@ class Unit(ABC):
 
         Returns
         -------
-        tuple[float, float]
+        Tuple[float, float]
             The width and height in the unit system.
         """
 

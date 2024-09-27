@@ -1,5 +1,5 @@
 """psychos.visual.image: Module with the Image class to display images in a Pyglet window."""
-from typing import Optional, Union, TYPE_CHECKING
+from typing import Optional, Union, Tuple, TYPE_CHECKING
 
 from pyglet.sprite import Sprite
 from pyglet.image import load
@@ -26,7 +26,7 @@ class Image(Sprite):
     ----------
     image_path : PathStr
         The path to the image file to be displayed.
-    position : tuple[float, float], default=(0, 0)
+    position : Tuple[float, float], default=(0, 0)
         The position of the image in the window, based on the defined coordinate system.
     width : Optional[float], default=None
         The target width to scale the image to. Cannot be used in conjunction with height and scale.
@@ -107,7 +107,7 @@ class Image(Sprite):
     def __init__(
         self,
         image_path: "PathStr",
-        position: tuple[float, float] = (0, 0),
+        position: Tuple[float, float] = (0, 0),
         width: Optional[float] = None,
         height: Optional[float] = None,
         scale: Optional[float] = None,
@@ -148,12 +148,12 @@ class Image(Sprite):
             self.scale_x, self.scale_y = scale
 
     @property
-    def position(self) -> tuple[float, float]:
+    def position(self) -> Tuple[float, float]:
         """Get the position of the image."""
         return self.x, self.y
 
     @position.setter
-    def position(self, value: tuple[float, float]):
+    def position(self, value: Tuple[float, float]):
         """Set the position of the image."""
         x, y = self.coordinate_units(*value)
         self.x = x
@@ -169,7 +169,7 @@ def _transform_image_anchor(
     anchor_y: "AnchorVertical",
     width: float,
     height: float,
-) -> tuple[float, float]:
+) -> Tuple[float, float]:
     """Gets the anchor point for an image based on the given anchor values."""
 
     # Dictionary mapping for x-axis anchor
@@ -202,7 +202,7 @@ def _compute_scale(
     scale: Optional[float],
     image_width: int,
     image_height: int,
-) -> Union[float, tuple[float, float]]:
+) -> Union[float, Tuple[float, float]]:
     """
     Compute the scale for an image based on the provided width, height, or scale.
 
@@ -221,7 +221,7 @@ def _compute_scale(
 
     Returns
     -------
-    Union[float, tuple[float, float]]
+    Union[float, Tuple[float, float]]
         The computed scale as a single float (if width or height is provided, but not both),
         or a tuple (scale_x, scale_y) if both width and height are provided.
 

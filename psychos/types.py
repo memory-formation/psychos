@@ -1,6 +1,6 @@
 """pychos.types: Type hints and aliases for the psychos package."""
 
-from typing import Union, Literal, TYPE_CHECKING
+from typing import Union, Literal, Tuple, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -19,10 +19,10 @@ PathStr = Union["str", "Path"]
 
 ColorType = Union[
     "str",
-    "tuple[int, int, int]",
-    "tuple[int, int, int, int]",
-    "tuple[float, float, float]",
-    "tuple[float, float, float, float]",
+    "Tuple[int, int, int]",
+    "Tuple[int, int, int, int]",
+    "Tuple[float, float, float]",
+    "Tuple[float, float, float, float]",
 ]
 
 # Anchor types for alignment

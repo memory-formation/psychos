@@ -1,3 +1,5 @@
+"""psychos.visual.window: Extension of the Pyglet window class with additional functionality."""
+
 from typing import Optional, Union, TYPE_CHECKING
 
 import pyglet
@@ -33,12 +35,13 @@ def get_window() -> "Window":
     return windows[0]
 
 
-class Window(PygletWindow):
+class Window(PygletWindow): # pylint: disable=abstract-method
     """
     Custom window for displaying visual elements.
 
-    A subclass of `pyglet.window.Window`, this class provides additional functionality
-    for handling units, background color, and event management, while maintaining full compatibility with the `pyglet` library. For more information on `pyglet`, refer to the official documentation.
+    A subclass of `pyglet.window.Window`, this class provides additional functionality for handling
+    units, background color, and event management, while maintaining full compatibility with the
+    `pyglet` library. For more information on `pyglet`, refer to the official documentation.
 
     Parameters
     ----------
@@ -53,17 +56,22 @@ class Window(PygletWindow):
     visible : bool, default=True
         Specifies whether the window is visible upon creation.
     background_color : Optional[ColorType], default=None
-        The background color of the window, provided as an RGB/RGBA tuple or a named color string. If None, the default color is used.
+        The background color of the window, provided as an RGB/RGBA tuple or a named color string.
+        If None, the default color is used.
     mouse_visible : bool, default=False
         Determines if the mouse cursor should be visible within the window.
     units : Union[UnitType, Unit], default="norm"
-        The unit system for the window. Can be a string or a Unit object to manage coordinates and sizes.
+        The unit system for the window. Can be a string or a Unit object to manage coordinates
+        and sizes.
     distance : Optional[float], default=50
-        The viewing distance from the screen in centimeters, used for visual angle calculations (e.g., degrees).
+        The viewing distance from the screen in centimeters, used for visual angle calculations
+        (e.g., degrees).
     inches : Optional[float], default=None
-        The diagonal size of the monitor in inches. Required for accurate DPI (dots per inch) and physical size calculations.
+        The diagonal size of the monitor in inches. Required for accurate DPI (dots per inch) and
+        physical size calculations.
     clear_after_flip : bool, default=True
-        If True, the window will be cleared after flipping the frame buffer, preparing it for the next frame.
+        If True, the window will be cleared after flipping the frame buffer, preparing it for the
+        next frame.
     kwargs : dict
         Additional keyword arguments to be passed to the Pyglet window constructor.
 
@@ -120,6 +128,7 @@ class Window(PygletWindow):
         # Keep the window open for 3 seconds
         window.wait(3)
     """
+
     def __init__(
         self,
         width: Optional[int] = None,
@@ -141,7 +150,7 @@ class Window(PygletWindow):
         if isinstance(screen, int):
             display = pyglet.canvas.get_display()
             screen = display.get_screens()[screen]
-            
+
         super().__init__(
             caption=caption,
             fullscreen=fullscreen,
@@ -175,12 +184,13 @@ class Window(PygletWindow):
         self.background_color = color_to_rgba(color)
         if self.background_color is not None:
             pyglet.gl.glClearColor(*self.background_color)  # Set the OpenGL clear color
-            self.clear()  # Clear the window with the new background color
+
+        self.clear()
 
     @property
     def dpi(self) -> float:
         """
-        Get the number of pixels per centimeter in the window, computed from the monitor's diagonal size in inches.
+        Get the number of pixels per centimeter in the window, from the monitor's size in inches.
 
         Returns
         -------

@@ -1,3 +1,5 @@
+"""psychos.utils.screens: Utiliy function to get all available screens using pyglet."""
+
 import pyglet
 
 

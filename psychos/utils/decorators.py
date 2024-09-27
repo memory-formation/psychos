@@ -1,3 +1,5 @@
+"""psychos.utils.decorators: Module with utility decorators for psychos."""
+
 from typing import Callable
 
 __all__ = ["docstring", "register"]

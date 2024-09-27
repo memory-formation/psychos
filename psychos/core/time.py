@@ -1,3 +1,5 @@
+"""psychos.core.time: Module with classes and functions for time management."""
+
 import warnings
 from datetime import datetime
 from time import sleep, time as _time
@@ -56,8 +58,8 @@ class Clock:
     """
     A class to represent a simple clock that tracks elapsed time.
 
-    The `Clock` class allows for tracking time intervals, with options to format the output as raw seconds, 
-    a formatted string using `strftime`, or a custom callable to process the elapsed time.
+    The `Clock` class allows for tracking time intervals, with options to format the output as raw
+    seconds, a formatted string using `strftime`, or a custom callable to process the elapsed time.
 
     Parameters
     ----------
@@ -66,7 +68,7 @@ class Clock:
     fmt : Optional[Union[Callable, str]], default=None
         Defines how the elapsed time is returned:
         - If None, returns the elapsed time as a float in seconds.
-        - If a string, the elapsed time is returned formatted according to `datetime.strftime` conventions.
+        - If a string, the elapsed time is returned formatted according to `datetime.strftime`.
         - If a callable, the callable is applied to the elapsed time, and its result is returned.
 
     Examples
@@ -75,7 +77,7 @@ class Clock:
 
     >>> clock = Clock()  # Starts the clock with the current time
     >>> elapsed = clock.time()  # Returns the elapsed time in seconds as a float
-    >>> clock.reset()  # Resets the clock’s start time to the current time
+    >>> clock.reset()  # Resets the clock's start time to the current time
 
     Using a formatted string to represent elapsed time:
 
@@ -88,6 +90,7 @@ class Clock:
     >>> custom_time = clock_callable.time()  # Returns elapsed time processed by the callable
 
     """
+
     def __init__(
         self,
         start_time: Optional[float] = None,
@@ -113,7 +116,7 @@ class Clock:
         >>> clock_fmt = Clock(fmt="%H:%M:%S")
         >>> clock_fmt.time()  # Returns elapsed time formatted as HH:MM:SS
         """
-        
+
         self.start_time = start_time if start_time is not None else _time()
         self.fmt = fmt
 
@@ -144,17 +147,17 @@ class Clock:
         elapsed_time = _time() - self.start_time
         if self.fmt is None:
             return elapsed_time
-        elif isinstance(self.fmt, str):
+        if isinstance(self.fmt, str):
             current_time = datetime.fromtimestamp(self.start_time + elapsed_time)
             return current_time.strftime(self.fmt)
-        elif callable(self.fmt):
+        if callable(self.fmt):
             return self.fmt(elapsed_time)
-        elif self.fmt is None:
+        if self.fmt is None:
             return elapsed_time
-        else:
-            raise TypeError(
-                "Invalid type for 'fmt'. Must be None, a string, or a callable."
-            )
+
+        raise TypeError(
+            "Invalid type for 'fmt'. Must be None, a string, or a callable."
+        )
 
     def reset(self):
         """
@@ -258,11 +261,14 @@ class Interval:
                 hog_period=self.hog_period,
             )  # Wait for the remaining time
         else:
-            message = f"The interval of {self.duration} seconds was exceeded by {-remaining_time:.2f} seconds."
+            message = (
+                f"The interval of {self.duration} seconds was exceeded"
+                f"by {-remaining_time:.2f} seconds."
+            )
 
             if self.on_overtime == "exception":
                 raise RuntimeError(message)
-            elif self.on_overtime == "warning":
+            if self.on_overtime == "warning":
                 warnings.warn(message, RuntimeWarning)
             # If "ignore", do nothing
 

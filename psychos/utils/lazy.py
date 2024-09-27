@@ -87,12 +87,12 @@ def attach(package_name, submodules=None, submod_attrs=None):
         attr: mod for mod, attrs in submod_attrs.items() for attr in attrs
     }
 
-    __all__ = sorted(submodules | attr_to_modules.keys())
+    __all__ = sorted(submodules | attr_to_modules.keys()) # pylint: disable=redefined-outer-name
 
     def __getattr__(name):
         if name in submodules:
             return importlib.import_module(f"{package_name}.{name}")
-        elif name in attr_to_modules:
+        if name in attr_to_modules:
             submod_path = f"{package_name}.{attr_to_modules[name]}"
             submod = importlib.import_module(submod_path)
             attr = getattr(submod, name)
@@ -105,8 +105,8 @@ def attach(package_name, submodules=None, submod_attrs=None):
                 pkg.__dict__[name] = attr
 
             return attr
-        else:
-            raise AttributeError(f"No {package_name} attribute {name}")
+
+        raise AttributeError(f"No {package_name} attribute {name}")
 
     def __dir__():
         return __all__

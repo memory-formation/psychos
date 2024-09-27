@@ -1,4 +1,4 @@
-"""psychos.core: Module for core functionality of psychos to manage time, keyboard and mouse events."""
+"""psychos.core: Module with  core functionality of psychos to manage time, keyboard and mouse."""
 from typing import TYPE_CHECKING
 
 from ..utils.lazy import attach

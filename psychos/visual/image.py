@@ -1,3 +1,4 @@
+"""psychos.visual.image: Module with the Image class to display images in a Pyglet window."""
 from typing import Optional, Union, TYPE_CHECKING
 
 from pyglet.sprite import Sprite
@@ -18,7 +19,8 @@ class Image(Sprite):
     """
     A class to display an image in a Pyglet window using the Sprite component.
 
-    This class supports positioning, scaling, and rotation of the image, as well as custom anchor points.
+    This class supports positioning, scaling, and rotation of the image, as well as custom 
+    anchor points.
 
     Parameters
     ----------
@@ -41,7 +43,8 @@ class Image(Sprite):
     window : Optional[Window], default=None
         The window in which the image will be displayed. If None, the default window is used.
     coordinate_units : Optional[Union[UnitType, Units]], default=None
-        The coordinate system to be used for positioning the image. If None, the window's default unit system is used.
+        The coordinate system to be used for positioning the image. If None, the window's default 
+        unit system is used.
     kwargs : dict
         Additional keyword arguments passed to the Pyglet Sprite class.
 
@@ -50,7 +53,8 @@ class Image(Sprite):
     rotation : float
         The rotation of the image in degrees.
     scale : float
-        The scale factor of the image. If both width and height are provided, this will be a tuple of (scale_x, scale_y).
+        The scale factor of the image. If both width and height are provided, this will be a tuple 
+        of (scale_x, scale_y).
 
     Examples
     --------
@@ -181,13 +185,13 @@ def _transform_image_anchor(
 
     try:
         x = anchor_x_mapping[anchor_x]
-    except KeyError:
-        raise ValueError(f"Invalid anchor_x value: {anchor_x}")
+    except KeyError as e:
+        raise ValueError(f"Invalid anchor_x value: {anchor_x}") from e
 
     try:
         y = anchor_y_mapping[anchor_y]
-    except KeyError:
-        raise ValueError(f"Invalid anchor_y value: {anchor_y}")
+    except KeyError as e:
+        raise ValueError(f"Invalid anchor_y value: {anchor_y}") from e
 
     return int(x), int(y)
 
@@ -252,3 +256,5 @@ def _compute_scale(
     # Case 6: If only scale is provided, return it directly
     if scale is not None:
         return scale
+
+    return 1.0

@@ -1,3 +1,5 @@
+"""psychos.visual.units: Module with unit systems for converting between coordinate systems."""
+
 from abc import ABC, abstractmethod
 from typing import Tuple, Dict, Type, TYPE_CHECKING, Union, Optional
 import re
@@ -80,7 +82,7 @@ class Unit(ABC):
             The x-coordinate or width.
         y : Union[float, int]
             The y-coordinate or height.
-        transformation : Literal["transform", "inverse_transform", "transform_size", "inverse_transform_size"], default="transform"
+        transformation : UnitTransformation, default="transform"
             The type of transformation to apply:
             - "transform" applies coordinate transformation from units to pixels.
             - "inverse_transform" applies coordinate transformation from pixels to units.
@@ -95,14 +97,14 @@ class Unit(ABC):
 
         if transformation == "transform":
             return self.transform(x, y)
-        elif transformation == "inverse_transform":
+        if transformation == "inverse_transform":
             return self.inverse_transform(x, y)
-        elif transformation == "transform_size":
+        if transformation == "transform_size":
             return self.transform_size(x, y)
-        elif transformation == "inverse_transform_size":
+        if transformation == "inverse_transform_size":
             return self.inverse_transform_size(x, y)
-        else:
-            raise ValueError(f"Unknown transformation type: {transformation}")
+
+        raise ValueError(f"Unknown transformation type: {transformation}")
 
     @abstractmethod
     def transform(self, x: float, y: float) -> Tuple[int, int]:
@@ -121,7 +123,6 @@ class Unit(ABC):
         tuple[int, int]
             The pixel coordinates.
         """
-        ...
 
     @abstractmethod
     def inverse_transform(self, x: int, y: int) -> Tuple[float, float]:
@@ -140,7 +141,6 @@ class Unit(ABC):
         tuple[float, float]
             The coordinates in the unit system.
         """
-        ...
 
     @abstractmethod
     def transform_size(self, width: float, height: float) -> Tuple[int, int]:
@@ -159,7 +159,6 @@ class Unit(ABC):
         tuple[int, int]
             The width and height in pixel values.
         """
-        ...
 
     @abstractmethod
     def inverse_transform_size(self, width: int, height: int) -> Tuple[float, float]:
@@ -178,7 +177,6 @@ class Unit(ABC):
         tuple[float, float]
             The width and height in the unit system.
         """
-        ...
 
 
 @register("px", UNIT_SYSTEMS)
@@ -353,7 +351,8 @@ class VDUnit(Unit):
 
     1vd is 1% of the diagonal of the window.
 
-    This unit is useful for ensuring elements are scaled proportionally based on the diagonal of the window.
+    This unit is useful for ensuring elements are scaled proportionally based on the 
+    diagonal of the window.
     """
 
     @property

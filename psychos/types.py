@@ -1,12 +1,9 @@
-from typing import Union, TYPE_CHECKING
+"""pychos.types: Type hints and aliases for the psychos package."""
+
+from typing import Union, Literal, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from pathlib import Path
-
-try:  # Compatibility with Python 3.7
-    from typing import Literal  # type: ignore
-except ImportError:
-    from typing_extensions import Literal  # type: ignore
 
 __all__ = [
     "Literal",
@@ -32,7 +29,7 @@ ColorType = Union[
 AnchorHorizontal = Literal["left", "center", "right"]
 AnchorVertical = Literal["top", "center", "bottom", "baseline"]
 
-# Unit types
+# Unit types
 UnitType = Literal["px", "norm", "%", "vw", "vh", "vd", "cm", "mm", "in", "pt", "deg"]
 UnitTransformation = Literal[
     "transform", "inverse_transform", "transform_size", "inverse_transform_size"

@@ -1,3 +1,4 @@
+"""psychos.visual.text: Module with the Text class to display text in a Pyglet window."""
 from typing import Optional, Union, TYPE_CHECKING
 
 from pyglet.text import Label
@@ -82,7 +83,7 @@ class Text(Label):
             self.units = self.window.units
         else:
             self.units = Unit.from_name(units, window=self.window)
-            
+
         x, y = self.units.transform(*position)
 
         width = parse_width(width, window=self.window)
@@ -120,7 +121,7 @@ class Text(Label):
     @position.setter
     def position(self, value: tuple[float, float]):
         """Set the position of the text."""
-        x, y = self.coordinate_units(*value)
+        x, y = self.units(*value)
         self.x = x
         self.y = y
 

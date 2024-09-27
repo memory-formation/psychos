@@ -1,3 +1,5 @@
+"""psychos.utils.colors: Module with utility functions to handle color conversions."""
+
 from typing import Optional, Tuple, Iterable
 import re
 import webcolors
@@ -111,9 +113,8 @@ def _from_color_name(name: str) -> Tuple[float, float, float, float]:
     """Convert a color name to an RGBA tuple with floats in [0.0, 1.0]."""
     try:
         rgb = webcolors.name_to_rgb(name)
-        a = 255
-    except ValueError:
-        raise ValueError(f"Unknown color name: '{name}'")
+    except ValueError as e:
+        raise ValueError(f"Unknown color name: '{name}'") from e
 
     return (rgb.red / 255.0, rgb.green / 255.0, rgb.blue / 255.0, 1.0)
 
@@ -161,22 +162,24 @@ def _from_float_tuple(
         else:
             r, g, b, a = color_tuple
         return (r, g, b, a)
+
+    # Assume 0-255 scale
+    if len(color_tuple) == 3:
+        r, g, b = color_tuple
+        a = 255.0
     else:
-        # Assume 0-255 scale
-        if len(color_tuple) == 3:
-            r, g, b = color_tuple
-            a = 255.0
-        else:
-            r, g, b, a = color_tuple
-        return (r / 255.0, g / 255.0, b / 255.0, a / 255.0)
+        r, g, b, a = color_tuple
+    return (r / 255.0, g / 255.0, b / 255.0, a / 255.0)
 
 
 def _from_mixed_tuple(color_list: list) -> Tuple[float, float, float, float]:
     """Convert a mixed-type RGB/RGBA list to RGBA with floats in [0.0, 1.0]."""
     try:
         numeric_color = tuple(float(c) for c in color_list)
-    except (TypeError, ValueError):
-        raise ValueError(f"Color tuple contains non-numeric elements: {color_list}")
+    except (TypeError, ValueError) as e:
+        raise ValueError(
+            f"Color tuple contains non-numeric elements: {color_list}"
+        ) from e
 
     if all(c <= 1.0 for c in numeric_color):
         if len(numeric_color) == 3:
@@ -185,11 +188,11 @@ def _from_mixed_tuple(color_list: list) -> Tuple[float, float, float, float]:
         else:
             r, g, b, a = numeric_color
         return (r, g, b, a)
+
+    # Assume 0-255 scale
+    if len(numeric_color) == 3:
+        r, g, b = numeric_color
+        a = 255.0
     else:
-        # Assume 0-255 scale
-        if len(numeric_color) == 3:
-            r, g, b = numeric_color
-            a = 255.0
-        else:
-            r, g, b, a = numeric_color
-        return (r / 255.0, g / 255.0, b / 255.0, a / 255.0)
+        r, g, b, a = numeric_color
+    return (r / 255.0, g / 255.0, b / 255.0, a / 255.0)

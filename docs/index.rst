@@ -6,6 +6,7 @@
    :author: DMF Group, University of Barcelona
    :copyright: 2024, DMF Group
    :robots: index, follow
+   :google-site-verification: NZnC_LS6qshTL2R0ilSswIJiof6k79det1tHayw-8O4
 
 .. image:: ./assets/psychos.svg
   :alt: psychos

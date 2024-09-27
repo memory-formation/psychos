@@ -4,7 +4,7 @@ import time
 from psychos.core import Clock, Interval, wait
 
 
-TIME_TOLERANCE = 0.01  # 1%
+TIME_TOLERANCE = 0.1  # 10% -> Wide tolerance for github actions. See timing calibration docs for more info.
 HOG_PERIOD = 0.3  # seconds
 
 

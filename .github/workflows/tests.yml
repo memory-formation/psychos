@@ -16,7 +16,6 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
         exclude:
-          # Exclude other combinations of Python versions on macOS and Windows
           - os: macos-latest
             python-version: "3.8"
           - os: macos-latest
@@ -50,11 +49,9 @@ jobs:
         run: |
           pip install ".[test]"
 
-      # Use xvfb-run only for Linux (Ubuntu)
-      - name: Run tests with pytest
+      - name: Run tests on ${{ matrix.os }}
         run: |
-          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+          if [ ${{ matrix.os }} == 'ubuntu-latest' ]; then
             xvfb-run pytest
           else
             pytest
-          fi

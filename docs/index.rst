@@ -23,21 +23,20 @@
    :target: https://pypi.org/project/psychos/
    :alt: PyPI version
 
-.. image:: https://readthedocs.org/projects/psychos/badge/?version=latest
-    :target: https://psychos.readthedocs.io/en/latest/?badge=latest
-    :alt: Documentation Status
-
 .. image:: https://img.shields.io/pypi/pyversions/psychos
    :target: https://pypi.org/project/psychos/
    :alt: PyPI - Python Version
 
-.. image:: https://img.shields.io/badge/license-MIT-green.svg
-   :target: https://github.com/memory-formation/psychos/blob/main/LICENSE
-   :alt: License
+.. image:: https://readthedocs.org/projects/psychos/badge/?version=latest
+    :target: https://psychos.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
-.. image:: https://img.shields.io/badge/platform-Windows%20|%20OS%20X%20|%20Linux-blue.svg
-   :target: https://pypi.org/project/psychos/
-   :alt: Platform
+.. image:: https://codecov.io/gh/memory-formation/psychos/graph/badge.svg?token=BFLLUMRKR0 
+ :target: https://codecov.io/gh/memory-formation/psychos
+
+.. image:: https://github.com/memory-formation/psychos/actions/workflows/tests.yml/badge.svg
+   :target: https://github.com/memory-formation/psychos/actions/workflows/tests.yml
+   :alt: Run Tests
 
 .. image:: https://img.shields.io/badge/based%20on-Pyglet-orange.svg
    :target: https://pyglet.org/
@@ -46,6 +45,14 @@
 .. image:: https://www.repostatus.org/badges/latest/wip.svg
    :alt: Project Status: WIP - Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
    :target: https://www.repostatus.org/#wip
+
+.. image:: https://img.shields.io/badge/license-MIT-green.svg
+   :target: https://github.com/memory-formation/psychos/blob/main/LICENSE
+   :alt: License
+
+.. image:: https://img.shields.io/badge/platform-Windows%20|%20OS%20X%20|%20Linux-blue.svg
+   :target: https://pypi.org/project/psychos/
+   :alt: Platform
 
 ----------------
 

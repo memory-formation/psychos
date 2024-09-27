@@ -1,3 +1,5 @@
+"""Unit tests for the 'psychos.core.time' module related to time management."""
+
 import pytest
 import time
 

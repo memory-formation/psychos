@@ -15,15 +15,10 @@ https://github.com/scientific-python/lazy-loader/blob/v0.4/LICENSE.md
 
 import importlib
 import importlib.util
-import os
 import sys
-import threading
 
 __version__ = "0.4"
 __all__ = ["attach"]
-
-
-threadlock = threading.Lock()
 
 
 def attach(package_name, submodules=None, submod_attrs=None):
@@ -87,7 +82,9 @@ def attach(package_name, submodules=None, submod_attrs=None):
         attr: mod for mod, attrs in submod_attrs.items() for attr in attrs
     }
 
-    __all__ = sorted(submodules | attr_to_modules.keys()) # pylint: disable=redefined-outer-name
+    __all__ = sorted(
+        submodules | attr_to_modules.keys()
+    )  # pylint: disable=redefined-outer-name
 
     def __getattr__(name):
         if name in submodules:
@@ -110,9 +107,5 @@ def attach(package_name, submodules=None, submod_attrs=None):
 
     def __dir__():
         return __all__
-
-    if os.environ.get("EAGER_IMPORT", ""):
-        for attr in set(attr_to_modules.keys()) | submodules:
-            __getattr__(attr)
 
     return __getattr__, __dir__, list(__all__)

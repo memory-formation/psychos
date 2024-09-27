@@ -49,9 +49,12 @@ jobs:
         run: |
           pip install ".[test]"
 
-      - name: Run tests on ${{ matrix.os }}
+      - name: Run tests with xvfb (Linux only)
+        if: matrix.os == 'ubuntu-latest'
         run: |
-          if [ ${{ matrix.os }} == 'ubuntu-latest' ]; then
-            xvfb-run pytest
-          else
-            pytest
+          xvfb-run pytest
+
+      - name: Run tests without xvfb (macOS and Windows)
+        if: matrix.os != 'ubuntu-latest'
+        run: |
+          pytest

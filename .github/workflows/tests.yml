@@ -50,11 +50,10 @@ jobs:
         run: |
           pip install ".[test]"
 
-      # Xvfb setup for Linux (Ubuntu) only
+      # Use xvfb-run only for Linux (Ubuntu)
       - name: Run tests with pytest
         run: |
           if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
-            sudo apt-get install -y xvfb
             xvfb-run pytest
           else
             pytest

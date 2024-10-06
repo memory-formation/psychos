@@ -1,6 +1,6 @@
 """pychos.types: Type hints and aliases for the psychos package."""
 
-from typing import Union, Literal, Tuple, TYPE_CHECKING
+from typing import Union, Literal, Tuple, TYPE_CHECKING, NamedTuple, Optional
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -13,6 +13,8 @@ __all__ = [
     "PathStr",
     "UnitType",
     "UnitTransformation",
+    "KeyEvent",
+    "KeyEventType",
 ]
 
 PathStr = Union["str", "Path"]
@@ -49,3 +51,15 @@ UnitType = Literal["px", "norm", "%", "vw", "vh", "vd", "cm", "mm", "in", "pt", 
 UnitTransformation = Literal[
     "transform", "inverse_transform", "transform_size", "inverse_transform_size"
 ]
+
+
+KeyEventType = Literal["press", "release"]
+
+
+class KeyEvent(NamedTuple):
+    """A named tuple representing a key event."""
+
+    key: Optional[str]
+    timestamp: float
+    modifiers: Optional[str]
+    event: KeyEventType

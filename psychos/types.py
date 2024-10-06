@@ -24,6 +24,21 @@ ColorType = Union[
     Tuple[float, float, float],
     Tuple[float, float, float, float],
 ]
+ColorSpace = Literal[
+    "auto",
+    "rgb",
+    "rgba",
+    "rgb255",
+    "rgba255",
+    "hex",
+    "hexa",
+    "name",
+    "hsv",
+    "cmyk",
+    "yiq",
+    "hsl",
+    None,
+]
 
 # Anchor types for alignment
 AnchorHorizontal = Literal["left", "center", "right"]

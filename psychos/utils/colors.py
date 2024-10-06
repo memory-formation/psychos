@@ -3,25 +3,9 @@
 import re
 from typing import Optional, Tuple, Iterable, Union, Callable, List
 
-from ..types import ColorType, Literal
+from ..types import ColorType, ColorSpace
 
 __all__ = ["Color"]
-
-ColorSpace = Literal[
-    "auto",
-    "rgb",
-    "rgba",
-    "rgb255",
-    "rgba255",
-    "hex",
-    "hexa",
-    "name",
-    "hsv",
-    "cmyk",
-    "yiq",
-    "hsl",
-    None,
-]
 
 
 class Color:
@@ -41,7 +25,9 @@ class Color:
     NAMED_COLORS = {}
 
     def __init__(
-        self, color: Optional[Union[ColorType, "Color"]] = None, space: ColorSpace = "auto"
+        self,
+        color: Optional[Union[ColorType, "Color"]] = None,
+        space: Union[ColorSpace, str] = "auto",
     ) -> None:
         """Initialize the Color"""
         if isinstance(color, Color):
@@ -179,7 +165,7 @@ class Color:
         """List all available named colors."""
         return list(cls.NAMED_COLORS.keys())
 
-    def to(self, space: ColorSpace) -> ColorType:
+    def to(self, space: Union[ColorSpace, str]) -> ColorType:
         """Generic class to get the color in a specific space.
 
         Parameters

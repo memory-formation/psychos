@@ -92,11 +92,11 @@ class Color:
         # 3 elements, are between 0 and 255: RGB255
         elif len(colors) == 3 and all(0 <= c <= 255 for c in colors):
             self.space = "rgb255"
-            self.colors = tuple(int(c) for c in colors)
+            self.color = tuple(int(c) for c in colors)
         # 4 elements, are between 0 and 255: RGBA255
         elif len(colors) == 4 and all(0 <= c <= 255 for c in colors):
             self.space = "rgba255"
-            self.colors = tuple(int(c) for c in colors)
+            self.color = tuple(int(c) for c in colors)
         else:
             raise ValueError("Ambiguous color format. Please specify the color space.")
 
@@ -126,7 +126,7 @@ class Color:
         ValueError
             If no conversion path exists between 'from_space' and 'to_space'.
         """
-        from collections import deque
+        from collections import deque  # pylint: disable=import-outside-toplevel
 
         # BFS initialization
         queue = deque([(from_space, [])])  # (current_space, conversion_path)
@@ -516,7 +516,7 @@ def rgb_to_rgb255(color: Tuple[float, float, float, float]) -> Tuple[int, int, i
 @Color.register_conversion("rgb255", "rgb")
 def rgb255_to_rgb(color: Tuple[int, int, int]) -> Tuple[float, float, float]:
     """Convert RGB255 to RGB."""
-    return tuple([c / 255.0 for c in color])
+    return tuple(c / 255.0 for c in color)
 
 
 @Color.register_conversion("rgba255", "rgba")
@@ -597,7 +597,7 @@ def rgba255_to_hexa(color: Tuple[int, int, int, int]) -> str:
 @Color.register_conversion("rgb", "yiq")
 def rgb_to_yiq(color: Tuple[float, float, float]) -> Tuple[float, float, float]:
     """Convert RGB to YIQ."""
-    import colorsys
+    import colorsys  # pylint: disable=import-outside-toplevel
 
     return colorsys.rgb_to_yiq(*color)
 
@@ -605,7 +605,7 @@ def rgb_to_yiq(color: Tuple[float, float, float]) -> Tuple[float, float, float]:
 @Color.register_conversion("yiq", "rgb")
 def yiq_to_rgb(color: Tuple[float, float, float]) -> Tuple[float, float, float]:
     """Convert YIQ to RGB."""
-    import colorsys
+    import colorsys  # pylint: disable=import-outside-toplevel
 
     return colorsys.yiq_to_rgb(*color)
 
@@ -613,7 +613,7 @@ def yiq_to_rgb(color: Tuple[float, float, float]) -> Tuple[float, float, float]:
 @Color.register_conversion("rgb", "hls")
 def rgb_to_hls(color: Tuple[float, float, float]) -> Tuple[float, float, float]:
     """Convert RGB to HLS."""
-    import colorsys
+    import colorsys  # pylint: disable=import-outside-toplevel
 
     return colorsys.rgb_to_hls(*color)
 
@@ -621,7 +621,7 @@ def rgb_to_hls(color: Tuple[float, float, float]) -> Tuple[float, float, float]:
 @Color.register_conversion("hls", "rgb")
 def hls_to_rgb(color: Tuple[float, float, float]) -> Tuple[float, float, float]:
     """Convert HLS to RGB."""
-    import colorsys
+    import colorsys  # pylint: disable=import-outside-toplevel
 
     return colorsys.hls_to_rgb(*color)
 
@@ -629,7 +629,7 @@ def hls_to_rgb(color: Tuple[float, float, float]) -> Tuple[float, float, float]:
 @Color.register_conversion("rgb", "hsv")
 def rgb_to_hsv(color: Tuple[float, float, float]) -> Tuple[float, float, float]:
     """Convert RGB to HSV."""
-    import colorsys
+    import colorsys  # pylint: disable=import-outside-toplevel
 
     return colorsys.rgb_to_hsv(*color)
 
@@ -637,7 +637,7 @@ def rgb_to_hsv(color: Tuple[float, float, float]) -> Tuple[float, float, float]:
 @Color.register_conversion("hsv", "rgb")
 def hsv_to_rgb(color: Tuple[float, float, float]) -> Tuple[float, float, float]:
     """Convert HSV to RGB."""
-    import colorsys
+    import colorsys  # pylint: disable=import-outside-toplevel
 
     return colorsys.hsv_to_rgb(*color)
 
@@ -672,12 +672,14 @@ def rgb_to_cmyk(color: Tuple[float, float, float]) -> Tuple[float, float, float,
 
 @Color.register_conversion("hls", "hsl")
 def hls_to_hsl(color: Tuple[float, float, float]) -> Tuple[float, float, float]:
+    """Convert HLS to HSL."""
     h, l, s = color
     return h, s, l
 
 
 @Color.register_conversion("hsl", "hls")
 def hsl_to_hls(color: Tuple[float, float, float]) -> Tuple[float, float, float]:
+    """Convert HSL to HLS."""
     h, s, l = color
     return h, l, s
 

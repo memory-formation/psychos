@@ -2,7 +2,7 @@
 
 import time
 
-from typing import Iterable, Literal, List, Optional, Union, TYPE_CHECKING
+from typing import Iterable, Dict, Literal, List, Optional, Union, TYPE_CHECKING
 
 from pyglet.window import key
 from ..types import KeyEvent
@@ -212,13 +212,13 @@ def wait_key(
     return KeyEvent(key=pressed_key, modifiers=pressed_modifiers, timestamp=timestamp, event=event)
 
 
-def _symbol_to_id(symbol: Union[str, int], mapping: Optional[dict[str, int]] = None) -> int:
+def _symbol_to_id(symbol: Union[str, int], mapping: Optional[Dict[str, int]] = None) -> int:
     """Convert a key or modifier symbol to its Pyglet ID."""
     mapping = mapping or REVERSE_KEY_MAP
     return mapping.get(symbol.upper(), -1) if isinstance(symbol, str) else symbol
 
 
-def _id_to_symbol(identifier: int, mapping: Optional[dict[int, str]] = None) -> str:
+def _id_to_symbol(identifier: int, mapping: Optional[Dict[int, str]] = None) -> str:
     """Convert a Pyglet key ID to its string representation."""
     mapping = mapping or KEY_NAMES_MAP
     symbol = mapping.get(identifier, f"UNKNOWN_{identifier}")

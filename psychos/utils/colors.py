@@ -45,10 +45,10 @@ class Color:
     ) -> None:
         """Initialize the Color"""
         if isinstance(color, Color):
-            color = color.color
             space = color.space
+            color = color.color
 
-        if space is not None:
+        if space is not None and isinstance(space, str):
             space = space.lower().strip()
 
         if space not in (self.list_spaces() + [None, "auto"]):
@@ -172,7 +172,7 @@ class Color:
     @classmethod
     def list_named_colors(cls) -> List[str]:
         """List all available named colors."""
-        return list(cls.keys())
+        return list(cls.NAMED_COLORS.keys())
 
     def to(self, space: ColorSpace) -> ColorType:
         """Generic class to get the color in a specific space.
@@ -507,10 +507,19 @@ def rgba_to_rgb(color: Tuple[float, float, float, float]) -> Tuple[float, float,
     return (r, g, b)
 
 
+def _to_255(c: float) -> int:
+    """Convert a 0-1 float color component to 255 scale."""
+    # To int
+    c = int(round(c * 255))
+    # Clip to 0-255 range
+    return min(max(c, 0), 255)
+
+
 @Color.register_conversion("rgb", "rgb255")
 def rgb_to_rgb255(color: Tuple[float, float, float, float]) -> Tuple[int, int, int]:
     """Convert RGB to RGB255."""
-    return tuple([int(min(max(round(255 * c), 0, 255))) for c in color])
+    r, g, b = color
+    return (_to_255(r), _to_255(g), _to_255(b))
 
 
 @Color.register_conversion("rgb255", "rgb")
@@ -529,7 +538,8 @@ def rgba255_to_rgba(color: Tuple[int, int, int, int]) -> Tuple[float, float, flo
 @Color.register_conversion("rgba", "rgba255")
 def rgba_to_rgba255(color: Tuple[float, float, float, float]) -> Tuple[int, int, int, int]:
     """Convert RGBA (0.0-1.0 scale) to RGBA255 (0-255 scale)."""
-    return tuple(int(min(max(round(c * 255), 0), 255)) for c in color)
+    r, g, b, a = color
+    return (_to_255(r), _to_255(g), _to_255(b), _to_255(a))
 
 
 @Color.register_conversion("name", "hex")

@@ -44,14 +44,8 @@ jobs:
           pylint_score=$(pylint psychos --fail-under=0 --exit-zero --disable=R0902,R0913,R0914,R0917 --score=y | grep "Your code has been rated" | awk '{print $7}' | tr -d '/10')
           anybadge --value=$pylint_score --label="pylint" --file=pylint_badge.svg 2=red 8=orange 9=yellow 10=green
 
-      - name: Upload pylint badge as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: pylint-badge
-          path: pylint_badge.svg
-
-      - name: Upload pylint output as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: pylint-output
-          path: pylint_output.txt
+      # - name: Upload pylint badge as artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: pylint-badge
+      #     path: pylint_badge.svg

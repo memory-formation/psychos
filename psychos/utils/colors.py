@@ -65,7 +65,7 @@ class Color:
         if self.color is None:
             self.space = None
 
-        if isinstance(self.color, str):
+        elif isinstance(self.color, str):
             self._detect_string_space()
 
         elif isinstance(self.color, (Iterable, tuple, list)):
@@ -87,6 +87,11 @@ class Color:
         # Check if a hexa color
         elif re.match(r"^#([0-9a-fA-F]{4}){1,2}$", color):
             self.space = "hexa"
+
+        else:
+            raise ValueError(
+                "Cannot detect color space from input. Is a not valid hex color or named color?"
+            )
 
     def _detect_iterable_space(self):
         """Detect the color space of the input color iterable."""
@@ -679,42 +684,16 @@ def rgb_to_cmyk(color: Tuple[float, float, float]) -> Tuple[float, float, float,
     return c, m, y, k
 
 
-@Color.register_conversion("rgb", "hsl")
-def rgb_to_hsl(color: Tuple[float, float, float]) -> Tuple[float, float, float]:
-    """Convert RGB to HSL."""
-    h, l, s = rgb_to_hls(color)
-
+@Color.register_conversion("hls", "hsl")
+def hls_to_hsl(color: Tuple[float, float, float]) -> Tuple[float, float, float]:
+    h, l, s = color
     return h, s, l
 
 
-@Color.register_conversion("hsl", "rgb")
-def hsl_to_rgb(color: Tuple[float, float, float]) -> Tuple[float, float, float]:
-    """Convert HSL to RGB."""
-
-    def hue_to_rgb(p, q, t):
-        if t < 0:
-            t += 1
-        if t > 1:
-            t -= 1
-        if t < 1 / 6:
-            return p + (q - p) * 6 * t
-        if t < 1 / 2:
-            return q
-        if t < 2 / 3:
-            return p + (q - p) * (2 / 3 - t) * 6
-        return p
-
+@Color.register_conversion("hsl", "hls")
+def hsl_to_hls(color: Tuple[float, float, float]) -> Tuple[float, float, float]:
     h, s, l = color
-    if s == 0:
-        r = g = b = l  # achromatic
-    else:
-        q = l * (1 + s) if l < 0.5 else l + s - l * s
-        p = 2 * l - q
-        r = hue_to_rgb(p, q, h + 1 / 3)
-        g = hue_to_rgb(p, q, h)
-        b = hue_to_rgb(p, q, h - 1 / 3)
-
-    return r, g, b
+    return h, l, s
 
 
 # The following dictionary contains the most common color names and their hex values.

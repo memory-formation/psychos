@@ -13,6 +13,7 @@ SAMPLE_COLORS = {
     "cmyk": (0.76, 0.0, 3 / 4, 1 / 5),
     "yiq": (0.55, -0.16, -0.31),
     "hsl": (0.33, 0.60, 0.5),
+    "hls": (0.33, 0.50, 0.6),
 }
 
 
@@ -229,3 +230,63 @@ def test_registerd_conversions(to_space, from_space, sample_colors):
         assert color.to(to_space)[:3] == pytest.approx(to_color[:3], abs=0.1)
     else:
         pytest.skip("Conversion not implemented")
+
+
+def test_none_color_init():
+    """Test initializing a color with None."""
+    color = Color(None)
+    assert color.color is None
+    assert color.space is None
+
+
+@pytest.mark.parametrize("to_space", SAMPLE_COLORS.keys())
+def test_conversions_from_none(to_space):
+    color = Color(None)
+    assert color.to(to_space) is None
+
+
+def test_invalid_auto_detection():
+
+    with pytest.raises(ValueError):
+        Color(3)
+
+
+def test_invalid_string_color():
+    with pytest.raises(ValueError):
+        Color("invalid_color")
+
+
+def test_not_found_path_conversions():
+    # Register color conversion
+    Color.register_conversion("test", "hex", lambda _: "#ffffff")
+    # Check if the conversion is found
+    color = Color("#32cd32", space="hex")
+    # Conversion cannot be found (We defined text->hex but not hex->text)
+    with pytest.raises(ValueError):
+        color.to("test")
+
+
+def test_not_found_named_color():
+
+    color = Color("#32cc32")
+    with pytest.raises(ValueError):
+        color.to_name()
+
+
+def test_invalid_name_color():
+
+    # If you specify a named color, you delay the color validation until the conversion
+    color = Color("invalid_color", space="name")
+
+    with pytest.raises(ValueError):
+        color.to_rgb()
+
+
+def test_detect_rgba255():
+    color = Color((128, 128, 128, 128))
+    assert color.space == "rgba255"
+    assert color.color == (128, 128, 128, 128)
+
+def test_cmyk_black():
+    color = Color((0, 0, 0), space="rgb")
+    assert color.to_cmyk() == (0., 0., 0., 1.)

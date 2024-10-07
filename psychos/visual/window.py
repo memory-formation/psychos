@@ -1,6 +1,6 @@
 """psychos.visual.window: Extension of the Pyglet window class with additional functionality."""
 
-from typing import Iterable, Optional, TYPE_CHECKING, Union
+from typing import Iterable, Optional, TYPE_CHECKING, Union, Tuple
 
 import pyglet
 from pyglet.window import Window as PygletWindow
@@ -140,7 +140,7 @@ class Window(PygletWindow):  # pylint: disable=abstract-method
         visible: bool = True,
         background_color: Optional["ColorType"] = None,
         mouse_visible: bool = False,
-        units: Union["UnitType", "Unit"] = "norm",
+        coordinates: Union["UnitType", "Unit"] = "norm",
         distance: Optional[float] = 50,
         inches: Optional[float] = None,
         clear_after_flip: bool = True,
@@ -163,29 +163,60 @@ class Window(PygletWindow):  # pylint: disable=abstract-method
 
         self.distance = distance
         self.inches = inches
-        if not self.fullscreen and height is not None:
-            self.height = parse_height(height, window=self)
-        if not self.fullscreen and width is not None:
-            self.width = parse_width(width, window=self)
         self.clear_after_flip = clear_after_flip
+        self._coordinates = None
+        self._background_color = None
 
-        self.units = Unit.from_name(units, window=self)
-        self.set_background_color(background_color)
+        if not self.fullscreen and height is not None:
+            self.height = height
+        if not self.fullscreen and width is not None:
+            self.width = width
+
+        self.coordinates = coordinates
+        self.background_color = background_color
         self.set_mouse_visible(mouse_visible)
         self.dispatch_events()
 
-    def set_background_color(self, color: Optional["ColorType"]) -> None:
+    @PygletWindow.width.setter
+    def width(self, value: Optional[Union[str, int, float]]) -> None:
+        """Set the width of the window."""
+        value = parse_width(value, window=self)
+        super().width = value
+
+    @PygletWindow.height.setter
+    def height(self, value: Optional[Union[str, int, float]]) -> None:
+        """Set the height of the window."""
+        value = parse_height(value, window=self)
+        super().height = value
+
+    @property
+    def coordinates(self) -> "Unit":
+        """Get the unit system used by the window."""
+        return self._coordinates
+
+    @coordinates.setter
+    def coordinates(self, value: Union["UnitType", "Unit"]) -> None:
+        """Set the unit system used by the window."""
+        self._coordinates = Unit.from_name(value, window=self)
+
+    @property
+    def background_color(self) -> Optional[Tuple[float, float, float, float]]:
+        """Get the background color of the window (r, g, b, a)."""
+        return self._background_color
+
+    @background_color.setter
+    def background_color(self, color: Optional[Union["ColorType", "Color"]]) -> None:
         """
         Set the background color of the window.
 
         Parameters
         ----------
         color : Optional[ColorType]
-            The background color as a tuple (r, g, b, a) or a color name.
+            The background color as a tuple (r, g, b, a) or a color name, or a Color object.
         """
-        self.background_color = Color(color).to_rgba()
-        if self.background_color is not None:
-            pyglet.gl.glClearColor(*self.background_color)  # Set the OpenGL clear color
+        self._background_color = Color(color).to_rgba()
+        if self._background_color is not None:
+            pyglet.gl.glClearColor(*self._background_color)
 
         self.clear()
 

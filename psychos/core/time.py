@@ -2,7 +2,7 @@
 
 import warnings
 from datetime import datetime
-from time import sleep, time as _time
+from time import sleep, perf_counter as _time
 from typing import Literal, Optional, Union, Callable
 
 import pyglet

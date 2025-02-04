@@ -1,18 +1,18 @@
 import importlib
 import pkgutil
 import pytest
-import os
-import platform
 
-if platform.system() == "Linux":
-    os.environ['PYOPENGL_PLATFORM'] = 'egl'
 
 # Test for all submodules inside psychos
-@pytest.mark.parametrize("module_name", [
-    name for _, name, _ in pkgutil.walk_packages(
-        importlib.import_module("psychos").__path__, "psychos."
-    )
-])
+@pytest.mark.parametrize(
+    "module_name",
+    [
+        name
+        for _, name, _ in pkgutil.walk_packages(
+            importlib.import_module("psychos").__path__, "psychos."
+        )
+    ],
+)
 def test_import_module(module_name):
     """
     Test to ensure all modules and submodules in the psychos package can be imported

@@ -1,4 +1,5 @@
 """psychos.visual.text: Module with the Text class to display text in a Pyglet window."""
+
 from typing import Optional, Union, Tuple, TYPE_CHECKING
 
 from pyglet.text import Label
@@ -74,25 +75,21 @@ class Text(Label):
         italic: bool = False,
         stretch: bool = False,
         window: Optional["Window"] = None,
-        units: Optional[Union["UnitType", "Unit"]] = None,
+        coordinates: Optional[Union["UnitType", "Unit"]] = None,
         **kwargs,
     ):
         # Retrieve window and set coordinate system
         self.window = window or get_window()
-        if units is None:
-            self.units = self.window.units
-        else:
-            self.units = Unit.from_name(units, window=self.window)
+        self._coordinates = None
+        self.coordinates = coordinates
 
-        x, y = self.units.transform(*position)
+        x, y = self.coordinates.transform(*position)
 
+        # Initialize text properties
         width = parse_width(width, window=self.window)
         height = parse_height(height, window=self.window)
-
-        # Convert color to RGBA
         color = Color(color).to_rgba255() or (255, 255, 255, 255)
 
-        # Initialize Label (superclass)
         super().__init__(
             text=text,
             x=x,
@@ -114,14 +111,43 @@ class Text(Label):
         )
 
     @property
+    def coordinates(self) -> "Unit":
+        """Get the coordinate system used for the text."""
+        return self._coordinates
+
+    @coordinates.setter
+    def coordinates(self, value: Optional[Union["UnitType", "Unit"]]):
+        """Set the coordinate system used for the text."""
+        if value is None:
+            self._coordinates = self.window.coordinates
+        else:
+            self._coordinates = Unit.from_name(value, window=self.window)
+
+    @Label.color.setter
+    def color(self, value: Optional[Union["ColorType", "Color"]]):
+        """Set the color of the text."""
+        value = Color(value).to_rgba255() or (255, 255, 255, 255)
+        super().color = value
+
+    @Label.height.setter
+    def height(self, value: Optional[Union[str, int, float]]):
+        value = parse_height(value, window=self.window)
+        super().height = value
+
+    @Label.width.setter
+    def width(self, value: Optional[Union[str, int, float]]):
+        value = parse_width(value, window=self.window)
+        super().width = value
+
+    @property
     def position(self) -> Tuple[float, float]:
-        """Get the position of the text."""
+        """Get the position of the text in pixels."""
         return self.x, self.y
 
     @position.setter
     def position(self, value: Tuple[float, float]):
         """Set the position of the text."""
-        x, y = self.units(*value)
+        x, y = self.coordinates.transform(*value)
         self.x = x
         self.y = y
 

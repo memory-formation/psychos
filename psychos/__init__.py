@@ -13,7 +13,7 @@ from .__version__ import __version__
 from .utils.lazy import attach
 
 
-submodules = ["visual", "utils", "core"]
+submodules = ["visual", "utils", "core", "gui"]
 submod_attrs = {
     "visual": ["Window", "get_window", "Text", "Image"],
 }

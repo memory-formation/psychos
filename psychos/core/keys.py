@@ -199,11 +199,15 @@ def wait_key(
 
     # Optimized main loop to wait for key press or max wait timeout
     end_time = start_time + max_wait if max_wait is not None else float("inf")
-    while not key_pressed and time.time() <= end_time:
-        window.dispatch_events()
-
-    # Capture the timestamp at the moment the key is pressed or when the wait ends
+    
     timestamp = clock.time() if clock else time.time()
+    while not key_pressed and timestamp <= end_time:
+        window.dispatch_events()
+        timestamp = clock.time() if clock else time.time()
+        
+
+    # # Capture the timestamp at the moment the key is pressed or when the wait ends
+    # timestamp = clock.time() if clock else time.time()
 
     # Remove the event handler and pop the key handler
     window.remove_handlers(**{on_key_event: check_key})

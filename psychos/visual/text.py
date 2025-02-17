@@ -43,8 +43,6 @@ class Text(Label):
         The name of the font to use.
     font_size : Optional[float], default=None
         The size of the font to use.
-    bold : bool, default=False
-        Whether the text is bold.
     italic : bool, default=False
         Whether the text is italicized.
     stretch : bool, default=False
@@ -71,7 +69,6 @@ class Text(Label):
         multiline: bool = False,
         font_name: Optional[str] = None,
         font_size: Optional[float] = None,
-        bold: bool = False,
         italic: bool = False,
         stretch: bool = False,
         window: Optional["Window"] = None,
@@ -102,7 +99,6 @@ class Text(Label):
             multiline=multiline,
             font_name=font_name,
             font_size=font_size,
-            bold=bold,
             italic=italic,
             stretch=stretch,
             align=align,

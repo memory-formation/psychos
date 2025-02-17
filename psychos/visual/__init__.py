@@ -9,14 +9,26 @@ submod_attrs = {
     "text": ["Text"],
     "image": ["Image"],
     "units": ["Unit"],
+    "rectangle": ["Rectangle"],
+    "bordered_rectangle": ["BorderedRectangle"],
 }
 
 __getattr__, __dir__, __all__ = attach(__name__, submod_attrs=submod_attrs)
 
 if TYPE_CHECKING:
-    __all__ = ["Window", "Image", "Text", "get_window", "Unit"]
+    __all__ = [
+        "Window",
+        "Image",
+        "Text",
+        "get_window",
+        "Unit",
+        "Rectangle",
+        "BorderedRectangle",
+    ]
 
     from .window import Window, get_window
     from .text import Text
     from .image import Image
     from .units import Unit
+    from .rectangle import Rectangle
+    from .bordered_rectangle import BorderedRectangle

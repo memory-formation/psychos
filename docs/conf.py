@@ -7,6 +7,8 @@ import os
 import sys
 import pkg_resources
 
+os.environ["PYGLET_HEADLESS"] = "1"
+
 sys.path.append(os.path.abspath(".."))
 
 # -- Project information -----------------------------------------------------

@@ -6,25 +6,27 @@ import time
 from psychos.core import Clock, Interval, wait
 
 
-TIME_TOLERANCE = 0.1  # 10% -> Wide tolerance for github actions. See timing calibration docs for more info.
+TIME_TOLERANCE = 0.1  # 10% -> Wide tolerance for github actions.
 HOG_PERIOD = 0.3  # seconds
 
+def _time():
+    return time.perf_counter()
 
 def is_close(actual, expected, tolerance):
     return abs(actual - expected) <= tolerance * expected
 
 def dummy_sleep(duration):
     """Accurate sleep function using busy waiting for accuracy in testing."""
-    start_time = time.time()
-    while time.time() - start_time < duration:
+    start_time = _time()
+    while _time() - start_time < duration:
         pass
 
 # Test suite for the 'wait' function
 def test_wait_function():
     duration = 2  # seconds
-    start_time = time.time()
+    start_time = _time()
     wait(duration, hog_period=HOG_PERIOD)
-    end_time = time.time()
+    end_time = _time()
     elapsed_time = end_time - start_time
     assert is_close(
         elapsed_time, duration, TIME_TOLERANCE
@@ -79,9 +81,9 @@ def test_clock_with_invalid_fmt():
 def test_interval_wait_within_duration():
     duration = 2  # seconds
     interval = Interval(duration, hog_period=HOG_PERIOD)
-    start_time = time.time()
+    start_time = _time()
     interval.wait()
-    end_time = time.time()
+    end_time = _time()
     elapsed_time = end_time - start_time
     assert is_close(
         elapsed_time, duration, TIME_TOLERANCE
@@ -92,9 +94,9 @@ def test_interval_wait_overtime_ignore():
     duration = 1  # seconds
     interval = Interval(duration, on_overtime="ignore", hog_period=HOG_PERIOD)
     dummy_sleep(2)  # Exceed the interval
-    start_time = time.time()
+    start_time = _time()
     interval.wait()  # Should not raise an error or warning
-    end_time = time.time()
+    end_time = _time()
     elapsed_time = end_time - start_time
     assert (
         elapsed_time < 0.1
@@ -168,7 +170,7 @@ def test_interval_context_manager():
     duration = 2  # seconds
     with Interval(duration, hog_period=HOG_PERIOD) as interval:
         dummy_sleep(1)
-    total_time = time.time() - interval.start_time
+    total_time = _time() - interval.start_time
     assert is_close(
         total_time, duration, TIME_TOLERANCE
     ), "'Interval' context manager did not wait for the correct remaining time within 1% tolerance."
@@ -185,18 +187,18 @@ def test_interval_remaining_method():
 
 def test_interval_zero_duration():
     interval = Interval(0)
-    start_time = time.time()
+    start_time = _time()
     with pytest.warns(RuntimeWarning):
         interval.wait()
-    elapsed_time = time.time() - start_time
+    elapsed_time = _time() - start_time
     assert elapsed_time < 0.1, "'Interval.wait()' with zero duration should not wait."
 
 
 def test_interval_negative_duration():
     interval = Interval(-1, on_overtime="ignore")
-    start_time = time.time()
+    start_time = _time()
     interval.wait()
-    elapsed_time = time.time() - start_time
+    elapsed_time = _time() - start_time
     assert (
         elapsed_time < 0.01
     ), "'Interval.wait()' with negative duration should not wait."
@@ -204,10 +206,10 @@ def test_interval_negative_duration():
 
 def test_interval_negative_exception_duration():
     interval = Interval(-1, on_overtime="exception")
-    start_time = time.time()
+    start_time = _time()
     with pytest.raises(RuntimeError):
         interval.wait()
-    elapsed_time = time.time() - start_time
+    elapsed_time = _time() - start_time
     assert (
         elapsed_time < 0.01
     ), "'Interval.wait()' with negative duration should not wait."

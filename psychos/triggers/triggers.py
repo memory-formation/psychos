@@ -1,6 +1,6 @@
 """This module provides implementations for sending triggers through a communication port."""
 
-from typing import Union, Optional
+from typing import Union, Optional, Dict
 
 from .ports import BasePort
 from ..core.time import wait
@@ -20,14 +20,14 @@ class BaseTrigger:
     ----------
     port : BasePort
         The communication port used to send trigger values.
-    mapping : dict[str, Union[int, bytes]]
+    mapping : Dict[str, Union[int, bytes]]
         An optional dictionary mapping trigger names to their corresponding values.
     """
 
     def __init__(
         self,
         port: BasePort,
-        mapping: Optional[dict[str, Union[int, bytes]]] = None,
+        mapping: Optional[Dict[str, Union[int, bytes]]] = None,
     ):
         """
         Initialize a BaseTrigger instance.
@@ -36,7 +36,7 @@ class BaseTrigger:
         ----------
         port : BasePort
             The communication port instance used for sending triggers.
-        mapping : dict[str, Union[int, bytes]], optional
+        mapping : Dict[str, Union[int, bytes]], optional
             A dictionary mapping trigger names (as strings) to their corresponding values
             (as integers or bytes). Defaults to None.
         """

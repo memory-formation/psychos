@@ -43,6 +43,10 @@ class BasePort:
         """Close the port connection."""
         raise NotImplementedError("Subclasses must implement this method.")
 
+    def encode(self, value):
+        """Encode a value to send through the port."""
+        return value
+
     def __repr__(self):
         return f"{self.__class__.__name__}({self.address})"
 
@@ -124,7 +128,7 @@ class SerialPort(BasePort):
 
         super().__init__(address, log=log)
         self.reset_value = reset_value
-        self.connection = serial.Serial(address=address, baudrate=baudrate, **kwargs)
+        self.connection = serial.Serial(address, baudrate=baudrate, **kwargs)
 
     def send(self, value: Union[int, bytes]):
         """
@@ -148,10 +152,15 @@ class SerialPort(BasePort):
         if self.connection is None:
             raise RuntimeError("The port is closed.")
 
-        if isinstance(value, int):
-            value = value.to_bytes(1, "big")
+        value = self.encode(value)
         self.connection.write(value)
         self._log(f"Sent value: {value}")
+
+    def encode(self, value: Union[int, bytes]) -> bytes:
+        """Encode a value as bytes."""
+        if isinstance(value, int):
+            value = hex(value)[2:4].encode()
+        return value
 
     def reset(self):
         """
@@ -222,6 +231,7 @@ class ParallelPort(BasePort):
             )
 
         super().__init__(address, log=log)
+        self.reset_value = reset_value
         # Convert hexadecimal string addresses to integer, if applicable.
         try:
             if isinstance(address, str) and address.startswith("0x"):
@@ -255,11 +265,13 @@ class ParallelPort(BasePort):
         if self._port is None:
             raise RuntimeError("The port is closed.")
 
-        if isinstance(value, int):
-            value = value.to_bytes(1, "big")
-        data = int.from_bytes(value, "big")
+        data = self.encode(value)
         self._port.setData(data)
         self._log(f"Set value: {value}")
+
+    def encode(self, value: Union[int, bytes]):
+        """Encode a value as bytes."""
+        return value
 
     def reset(self):
         """

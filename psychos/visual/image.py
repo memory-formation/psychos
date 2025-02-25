@@ -115,18 +115,15 @@ class Image(Sprite):
         anchor_x: "AnchorHorizontal" = "center",
         anchor_y: "AnchorVertical" = "center",
         window: Optional["Window"] = None,
-        units: Optional[Union["UnitType", "Unit"]] = None,
+        coordinates: Optional[Union["UnitType", "Unit"]] = None,
         **kwargs,
     ):
         # Retrieve the window and set coordinate system
         self.window = window or get_window()
+        self._coordinates = None
+        self.coordinates = coordinates
 
-        # Initialize and transform the position
-        if units is None:
-            self.units = self.window.units
-        else:
-            self.units = Unit.from_name(units, window=self.window)
-        x, y = self.units.transform(*position)
+        x, y = self.coordinates.transform(*position)
 
         width = parse_width(width, window=self.window)
         height = parse_height(height, window=self.window)
@@ -151,6 +148,7 @@ class Image(Sprite):
     def position(self) -> Tuple[float, float]:
         """Get the position of the image."""
         return self.x, self.y
+    
 
     @position.setter
     def position(self, value: Tuple[float, float]):
@@ -158,6 +156,19 @@ class Image(Sprite):
         x, y = self.coordinate_units(*value)
         self.x = x
         self.y = y
+
+    @property
+    def coordinates(self) -> "Unit":
+        """Get the coordinate system used for the text."""
+        return self._coordinates
+
+    @coordinates.setter
+    def coordinates(self, value: Optional[Union["UnitType", "Unit"]]):
+        """Set the coordinate system used for the text."""
+        if value is None:
+            self._coordinates = self.window.coordinates
+        else:
+            self._coordinates = Unit.from_name(value, window=self.window)
 
     def draw(self) -> "Image":
         super().draw()

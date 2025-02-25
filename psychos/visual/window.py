@@ -164,6 +164,7 @@ class Window(PygletWindow):  # pylint: disable=abstract-method
         self.clear_after_flip = clear_after_flip
         self._coordinates = None
         self._background_color = None
+        self._flip_callbacks = []
 
         if not self.fullscreen and height is not None:
             self.height = height
@@ -243,6 +244,18 @@ class Window(PygletWindow):  # pylint: disable=abstract-method
         # Convert DPI to pixels per centimeter
         return dpi
 
+    def on_flip(self, func, *args, **kwargs):
+        """
+        Register a function to be called after flipping the window's frame buffer.
+
+        This method allows you to register a function to be called after flipping the window's frame
+        buffer. The function will be called with the provided arguments and keyword arguments after
+        the flip operation is completed.
+
+        If several functions are registered, they will be called in the order they were added.
+        """
+        self._flip_callbacks.append((func, args, kwargs))
+
     def flip(self, clear: Optional[bool] = None) -> "Window":
         """
         Flip the window's frame buffer and optionally clear the window after.
@@ -258,6 +271,11 @@ class Window(PygletWindow):  # pylint: disable=abstract-method
         clear = clear if clear is not None else self.clear_after_flip
         if clear:
             self.clear()
+
+        if self._flip_callbacks:
+            for func, args, kwargs in self._flip_callbacks:
+                func(*args, **kwargs)
+            self._flip_callbacks.clear()
 
         return self
 
@@ -291,11 +309,11 @@ class Window(PygletWindow):  # pylint: disable=abstract-method
 
         This function waits for a key event (either press or release) to occur, and returns the key,
         modifiers, and the timestamp when the event happened. It supports specifying a set of keys
-        to listen for, or returning the first key event of any kind if no specific keys are 
-        provided. The function can also accept a timeout (`max_wait`), after which it will return 
+        to listen for, or returning the first key event of any kind if no specific keys are
+        provided. The function can also accept a timeout (`max_wait`), after which it will return
         even if no key event occurs.
 
-        If `modifiers` are provided, the function will check if all specified modifiers are pressed 
+        If `modifiers` are provided, the function will check if all specified modifiers are pressed
         at the time of the key event. Modifiers can be ignored if `modifiers` is set to `None`, or
         you can enforce that no modifiers are pressed by passing an empty list.
 
@@ -308,17 +326,17 @@ class Window(PygletWindow):  # pylint: disable=abstract-method
             - An integer representing the Pyglet key ID (e.g., `pyglet.window.key.SPACE`).
             - An iterable of strings or integers representing multiple keys.
 
-            If no keys are provided (`keys=None`), the function will return on any key press or 
+            If no keys are provided (`keys=None`), the function will return on any key press or
             release event.
         modifiers : Optional[Union[Iterable[Union[str, int]], str, int]]
             The modifiers to check for. It can be one of the following:
 
             - A string representing a modifier name (e.g., "CTRL", "SHIFT").
-            - An integer representing the Pyglet modifier bitmask 
+            - An integer representing the Pyglet modifier bitmask
                 (e.g., `pyglet.window.key.MOD_SHIFT`).
             - An iterable of strings or integers representing multiple modifiers.
 
-            If `None`, the function ignores any modifiers. If an empty list is provided, the 
+            If `None`, the function ignores any modifiers. If an empty list is provided, the
             function will only return when no modifiers are pressed.
 
         clock : Optional["Clock"]
@@ -332,11 +350,11 @@ class Window(PygletWindow):  # pylint: disable=abstract-method
             before a key event occurs, the function returns `None` and the current timestamp.
 
         event : Literal["press", "release"], default "press"
-            Specifies whether to wait for a key press event (`"press"`) or a key release 
+            Specifies whether to wait for a key press event (`"press"`) or a key release
             event (`"release"`).
 
         clear_events : bool, default True
-            Whether to clear any pending events before waiting for the key event. This can be 
+            Whether to clear any pending events before waiting for the key event. This can be
             useful to avoid processing old events that occurred before calling this function.
 
         Returns
@@ -344,19 +362,19 @@ class Window(PygletWindow):  # pylint: disable=abstract-method
         KeyEvent
             A named tuple containing the following:
 
-            - ``key``: 
-                The pressed or released key, returned as a string (e.g., "SPACE"). If `max_wait` 
+            - ``key``:
+                The pressed or released key, returned as a string (e.g., "SPACE"). If `max_wait`
                 is reached without any event, this will be `None`.
-            - ``modifiers``: 
-                A string representation of the modifiers (e.g., "CTRL|SHIFT") pressed at the time 
-                of the event. If no modifiers were pressed, this will be an empty string. 
+            - ``modifiers``:
+                A string representation of the modifiers (e.g., "CTRL|SHIFT") pressed at the time
+                of the event. If no modifiers were pressed, this will be an empty string.
                 If modifiers are ignored (`modifiers=None`), this will also be empty.
-            - ``timestamp``: 
-                The timestamp when the key event occurred, using either the provided clock or 
+            - ``timestamp``:
+                The timestamp when the key event occurred, using either the provided clock or
                 `time.time()`.
-            - ``event``: 
+            - ``event``:
                 A string representing whether the key event was a "press" or "release".
-            
+
         Raises
         ------
         AssertionError

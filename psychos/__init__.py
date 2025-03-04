@@ -15,7 +15,7 @@ from .utils.lazy import attach
 
 submodules = ["visual", "utils", "core", "gui", "triggers", "sound"]
 submod_attrs = {
-    "visual": ["Window", "get_window", "Text", "Image"],
+    "visual": ["Window", "get_window"],
 }
 
 __getattr__, __dir__, __all__ = attach(__name__, submodules=submodules, submod_attrs=submod_attrs)
@@ -32,8 +32,6 @@ if TYPE_CHECKING:
         "gui",
         "triggers",
         "Window",
-        "Text",
-        "Image",
     ]
 
     from . import visual
@@ -42,5 +40,3 @@ if TYPE_CHECKING:
     from . import triggers
     from . import sound
     from . import gui
-
-    from .visual import Window, Text, Image

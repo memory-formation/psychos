@@ -1,8 +1,9 @@
 """psychos.visual.image: Module with the Image class to display images in a Pyglet window."""
+
 from typing import Optional, Union, Tuple, TYPE_CHECKING
 
 from pyglet.sprite import Sprite
-from pyglet.image import load
+from pyglet.image import ImageData
 
 from .window import get_window
 from .units import Unit, parse_height, parse_width
@@ -12,14 +13,25 @@ if TYPE_CHECKING:
     from ..types import UnitType, AnchorHorizontal, AnchorVertical, PathStr
 
 
-__all__ = ["Image"]
 
 
-class Image(Sprite):
+__all__ = ["RawImage"]
+
+
+def _map_value_to_bytes(value: Tuple[int, ...]) -> Tuple[int, ...]:
+    """Map integer values to bytes."""
+    return bytes(tuple(map(int, value)))
+
+def _array_to_bytes(data):
+
+    return b"".join(map(_map_value_to_bytes, data))
+
+
+class RawImage(Sprite):
     """
     A class to display an image in a Pyglet window using the Sprite component.
 
-    This class supports positioning, scaling, and rotation of the image, as well as custom 
+    This class supports positioning, scaling, and rotation of the image, as well as custom
     anchor points.
 
     Parameters
@@ -43,7 +55,7 @@ class Image(Sprite):
     window : Optional[Window], default=None
         The window in which the image will be displayed. If None, the default window is used.
     coordinate_units : Optional[Union[UnitType, Units]], default=None
-        The coordinate system to be used for positioning the image. If None, the window's default 
+        The coordinate system to be used for positioning the image. If None, the window's default
         unit system is used.
     kwargs : dict
         Additional keyword arguments passed to the Pyglet Sprite class.
@@ -53,7 +65,7 @@ class Image(Sprite):
     rotation : float
         The rotation of the image in degrees.
     scale : float
-        The scale factor of the image. If both width and height are provided, this will be a tuple 
+        The scale factor of the image. If both width and height are provided, this will be a tuple
         of (scale_x, scale_y).
 
     Examples
@@ -106,7 +118,7 @@ class Image(Sprite):
 
     def __init__(
         self,
-        image_path: "PathStr",
+        raw_image,
         position: Tuple[float, float] = (0, 0),
         width: Optional[float] = None,
         height: Optional[float] = None,
@@ -118,6 +130,7 @@ class Image(Sprite):
         coordinates: Optional[Union["UnitType", "Unit"]] = None,
         **kwargs,
     ):
+
         # Retrieve the window and set coordinate system
         self.window = window or get_window()
         self._coordinates = None
@@ -128,8 +141,8 @@ class Image(Sprite):
         width = parse_width(width, window=self.window)
         height = parse_height(height, window=self.window)
 
+        image = self.parse_image(raw_image)
         # Load the image from the given path
-        image = load(filename=image_path)
         image.anchor_x, image.anchor_y = _transform_image_anchor(
             anchor_x, anchor_y, image.width, image.height
         )
@@ -143,6 +156,27 @@ class Image(Sprite):
             self.scale = scale
         else:
             self.scale_x, self.scale_y = scale
+
+    def parse_image(self, raw_image) -> "ImageData":
+
+        # If type of ImageData, return it directly
+        if isinstance(raw_image, ImageData):
+            return raw_image
+
+        # Check if numpy array without importing numpy
+        if hasattr(raw_image, "shape") and hasattr(raw_image, "reshape"):
+            shape = raw_image.shape
+            height, width, channels = shape
+            data = raw_image.reshape(-1, channels).astype(int)
+            data = _array_to_bytes(data)
+            assert channels in (
+                3,
+                4,
+            ), f"Incompatible shape {shape}. Only RGB and RGBA images are supported"
+            fmt = "RGBA" if channels == 4 else "RGB"
+            return ImageData(width, height, fmt, data)
+
+        raise NotImplementedError("Only ImageData and numpy arrays are supported")
 
     @property
     def position(self) -> Tuple[float, float]:
@@ -169,7 +203,7 @@ class Image(Sprite):
         else:
             self._coordinates = Unit.from_name(value, window=self.window)
 
-    def draw(self) -> "Image":
+    def draw(self) -> "RawImage":
         super().draw()
         return self
 

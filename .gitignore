@@ -165,6 +165,7 @@ cython_debug/
 *.py
 !*/*.py
 !*/**/*.py
+*.ipynb
 
 # MacOS files
 .DS_Store

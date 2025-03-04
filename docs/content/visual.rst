@@ -18,8 +18,8 @@ Visual Stimuli
 .. autosummary::
    :toctree: autosummary
 
-   psychos.Text
-   psychos.Image
+   psychos.visual.Text
+   psychos.visual.Image
 
 
 

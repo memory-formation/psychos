@@ -1,4 +1,4 @@
-"""psychos.dialog: Module for creating simple dialogs using Tkinter."""
+"""psychos.gui: Module for creating simple dialogs using Tkinter."""
 
 from typing import TYPE_CHECKING
 

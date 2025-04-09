@@ -279,6 +279,10 @@ def gabor_3d(
     else:
         norm_gray = (gabor_gray - gabor_gray.min()) / (gabor_gray.max() - gabor_gray.min())
 
+    # Reapply contrast after normalization.
+    if contrast != 1.0:
+        norm_gray = 0.5 + contrast * (norm_gray - 0.5)
+
     # Map normalized grayscale values to color (RGBA)
     if isinstance(cmap, str):
         try:

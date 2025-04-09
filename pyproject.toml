@@ -9,7 +9,7 @@ requires-python = ">=3.8"
 license = {text = "MIT"}
 dynamic = ["version", "readme"]
 dependencies = [
-    "pyglet"
+    "pyglet>=2.0.0",
 ]
 authors = [
     {name="Dynamics of Memory Formation Group", email="llfuentemilla@ub.edu"},
@@ -59,6 +59,11 @@ readme = {file = ["README.md"], content-type = "text/markdown"}
 docs = [
     "sphinx==8.0.2",
     "pydata-sphinx-theme==0.16",
+]
+extra = [
+    "numpy>=1.20",
+    "pyparallel",
+    "pyserial",
 ]
 test = [
     "pytest",

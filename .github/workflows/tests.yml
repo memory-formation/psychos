@@ -47,7 +47,7 @@ jobs:
 
       - name: Install dependencies with [test] extras
         run: |
-          pip install ".[test]"
+          pip install ".[test, extra]"
 
       - name: Run tests with xvfb (Linux only)
         if: matrix.os == 'ubuntu-latest'

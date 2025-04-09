@@ -7,7 +7,7 @@ Window
 .. autosummary::
    :toctree: autosummary
 
-   psychos.Window
+   psychos.visual.Window
    psychos.visual.get_window
 
 

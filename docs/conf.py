@@ -7,7 +7,10 @@ import os
 import sys
 import pkg_resources
 
-os.environ["PYGLET_HEADLESS"] = "1"
+# Required to avoid pyglet to open a window when running in readthedocs
+if os.environ.get("READTHEDOCS") == "True":
+    os.environ["PYGLET_HEADLESS"] = "1"
+
 
 sys.path.append(os.path.abspath(".."))
 

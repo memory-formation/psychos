@@ -11,6 +11,7 @@ except ImportError:
 from ..utils import Color
 from ..types import ColorType
 
+__all__ = ["gabor_2d", "gabor_3d", "reescale"]
 
 def reescale(
     arr: "np.ndarray",

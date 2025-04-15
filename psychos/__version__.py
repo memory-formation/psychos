@@ -7,5 +7,5 @@ directory for full license terms.
 (C) 2024 DMF Research Lab. All rights reserved.
 """
 
-__version__ = "0.0.4"
+__version__ = "0.0.5.dev0"
 __all__ = ["__version__"]

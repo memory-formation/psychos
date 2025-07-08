@@ -13,6 +13,7 @@ submod_attrs = {
     "bordered_rectangle": ["BorderedRectangle"],
     "gabor": ["Gabor"],
     "raw_image": ["RawImage"],
+    "circle": ["Circle"],
 }
 
 __getattr__, __dir__, __all__ = attach(__name__, submod_attrs=submod_attrs)
@@ -38,3 +39,4 @@ if TYPE_CHECKING:
     from .bordered_rectangle import BorderedRectangle
     from .gabor import Gabor
     from .raw_image import RawImage
+    from .circle import Circle

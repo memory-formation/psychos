@@ -28,6 +28,7 @@ Basic building blocks with predefined and parametrizable visual stimuli to easil
    psychos.visual.BorderedRectangle
    psychos.visual.Gabor
    psychos.visual.RawImage
+   psychos.visual.Circle
 
 Units system
 ------------

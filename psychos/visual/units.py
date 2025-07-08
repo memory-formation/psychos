@@ -216,14 +216,14 @@ class NormalizedUnits(Unit):
     def transform(self, x: float, y: float) -> Tuple[int, int]:
         x_pixel = int((x + 1) * self.window.width / 2)
         x_pixel = min(max(x_pixel, 0), self.window.width - 1)
-        y_pixel = int((1 - y) * self.window.height / 2)
+        y_pixel = int((1 + y) * self.window.height / 2)
         y_pixel = min(max(y_pixel, 0), self.window.height - 1)
 
         return x_pixel, y_pixel
 
     def inverse_transform(self, x: int, y: int) -> Tuple[float, float]:
         x_unit = (x / self.window.width) * 2 - 1
-        y_unit = 1 - (y / self.window.height) * 2
+        y_unit = (y / self.window.height) * 2 - 1
 
         return x_unit, y_unit
 

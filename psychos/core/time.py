@@ -43,8 +43,9 @@ def wait(duration: float, sleep_interval: float = 0.8, hog_period: float = 0.02)
         remaining_time = min(end_time_slow - _time(), sleep_interval)
 
         # Sleep for the smaller of the remaining time or the sleep_interval
-        sleep(remaining_time)
-
+        if remaining_time > 0:
+            sleep(remaining_time)
+            
         # After sleeping, dispatch events to ensure responsiveness
         _dispatch_events()
 

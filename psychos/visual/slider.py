@@ -14,6 +14,7 @@ from ..core.interact import interact
 from ..types import InteractState
 from .rectangle import Rectangle, transform_rectangle_anchor
 from .circle import Circle
+from .text import Text
 
 __all__ = ["Slider", "SliderState", "InteractState"]
 
@@ -45,8 +46,6 @@ class Slider:
         Minimum and maximum numeric values of the slider.
     position : tuple of float, default=(0, 0)
         Center position of the slider in the given coordinate system.
-    ticks : int or tuple of float, optional
-        If int, number of evenly spaced tick marks. If tuple, explicit tick values.
     width : str or float, default="50vw"
         Total width of the slider line (supports relative units, e.g., "vw").
     height : str or float, default="4vh"
@@ -57,6 +56,15 @@ class Slider:
         Thickness of the main slider line.
     tick_width : str or float, default="1px"
         Width of each tick mark line.
+    ticks : int or tuple of float, optional
+        If int, number of evenly spaced tick marks.
+        If tuple, explicit numeric tick values along the interval.
+    tick_labels : tuple of str, optional
+        Optional text labels for each tick. Must match the number of ticks.
+    tick_size : str or float, default=10
+        Length of each tick mark (in pixels or relative units).
+    tick_padding : str or float, optional
+        Distance between the slider line and the tick labels, if provided.
     circle_radius : str or float, default="5px"
         Radius of the draggable circle indicating the current value.
     circle_hover_increase : float, default=1.5
@@ -94,7 +102,6 @@ class Slider:
     >>>
     >>> state = slider.wait_response(callback=callback, exit_key="SPACE")
     >>> print("Final value:", state.value)
-
     """
 
     def __init__(
@@ -102,12 +109,15 @@ class Slider:
         initial_value: Optional[float] = None,
         interval: Tuple[float, float] = (0.0, 100),
         position: Tuple[float, float] = (0, 0),
-        ticks: Optional[Union[Tuple[float, ...], int]] = None,
         width: Union[str, int, float] = "50vw",
         height: Union[str, int, float] = "4vh",
         color: "ColorType" = None,
         line_width: Union[str, int, float] = "2px",
         tick_width: Union[str, int, float] = "1px",
+        ticks: Optional[Union[Tuple[float, ...], int]] = None,
+        tick_labels: Optional[Tuple[str, ...]] = None,
+        tick_size: Union[str, int, float] = 10,
+        tick_padding: Optional[Union[str, int, float]] = None,
         circle_radius: Union[str, int, float] = "5px",
         circle_hover_increase: float = 1.5,
         circle_grab_increase: float = 1.5,
@@ -149,6 +159,9 @@ class Slider:
         self._line_height = parse_height(line_width, window=self.window) or 1
         self._tick_width = parse_width(tick_width, window=self.window) or 1
         self._ticks_values = ticks or ()
+        self._tick_labels = tick_labels or ()
+        self._tick_size = 10
+        self._tick_padding = parse_height(tick_padding, window=self.window) or self._height
         self._color = color
         self._components = {}
         self._circle_radius = parse_height(circle_radius, window=self.window) or 1
@@ -189,8 +202,8 @@ class Slider:
         self.tick_marks = []
         tick = self._initialize_tick(self._x, self._line_height)
         self.tick_marks.append(tick)
-        tick = self._initialize_tick(self._x + self._width, self._line_height)
-        self.tick_marks.append(tick)
+
+        self.tick_labels = []
 
         # Initialize the rest of ticks if provided
         if isinstance(self._ticks_values, int):  # Evenly spaced ticks
@@ -203,6 +216,29 @@ class Slider:
             x = self._map_value_to_position(tick_value)
             tick = self._initialize_tick(x, self._tick_width)
             self.tick_marks.append(tick)
+
+        tick = self._initialize_tick(self._x + self._width, self._line_height)
+        self.tick_marks.append(tick)
+
+        # Now initialize tick labels if provided
+        if self._tick_labels:
+            assert len(self._tick_labels) == len(self.tick_marks), (
+                "Number of tick labels must match number of tick marks."
+                f" Got {len(self._tick_labels)} labels and {len(self.tick_marks)} ticks."
+            )
+
+            for label_text, tick in zip(self._tick_labels, self.tick_marks):
+                label = Text(
+                    text=str(label_text),
+                    position=(tick.x, tick.y - self._tick_padding),
+                    font_size=self._tick_size,
+                    color=self._color,
+                    window=self.window,
+                    coordinates="px",
+                    anchor_x="center",
+                    anchor_y="top",
+                )
+                self.tick_labels.append(label)
 
         # Now the circle representing the current value
         x = self._map_value_to_position(self._initial_value)
@@ -323,6 +359,9 @@ class Slider:
         self._components["mid_line"].draw()
         for tick in self.tick_marks:
             tick.draw()
+
+        for label in self.tick_labels:
+            label.draw()
 
         self._update_circle()
         self._components["circle"].draw()

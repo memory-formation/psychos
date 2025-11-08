@@ -14,6 +14,7 @@ submod_attrs = {
     "gabor": ["Gabor"],
     "raw_image": ["RawImage"],
     "circle": ["Circle"],
+    "slider": ["Slider"],
 }
 
 __getattr__, __dir__, __all__ = attach(__name__, submod_attrs=submod_attrs)
@@ -21,14 +22,16 @@ __getattr__, __dir__, __all__ = attach(__name__, submod_attrs=submod_attrs)
 if TYPE_CHECKING:
     __all__ = [
         "Window",
+        "get_window",
         "Image",
         "Text",
-        "get_window",
         "Unit",
         "Rectangle",
         "BorderedRectangle",
         "Gabor",
         "RawImage",
+        "Circle",
+        "Slider",
     ]
 
     from .window import Window, get_window
@@ -40,3 +43,4 @@ if TYPE_CHECKING:
     from .gabor import Gabor
     from .raw_image import RawImage
     from .circle import Circle
+    from .slider import Slider

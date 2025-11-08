@@ -63,3 +63,15 @@ class KeyEvent(NamedTuple):
     timestamp: float
     modifiers: Optional[str]
     event: KeyEventType
+
+
+class InteractState(NamedTuple):
+    """A named tuple representing the state during interaction."""
+
+    pressed_key: Optional[str]
+    pressed_modifiers: Optional[str]
+    mouse_x: Optional[float]
+    mouse_y: Optional[float]
+    mouse_button: Optional[str]
+    timestamp: float
+    elapsed_time: float

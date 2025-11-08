@@ -8,13 +8,14 @@ submod_attrs = {
     "window": ["Window", "get_window"],
     "text": ["Text"],
     "image": ["Image"],
+    "slider": ["Slider"],
     "units": ["Unit"],
     "rectangle": ["Rectangle"],
     "bordered_rectangle": ["BorderedRectangle"],
     "gabor": ["Gabor"],
     "raw_image": ["RawImage"],
     "circle": ["Circle"],
-    "slider": ["Slider"],
+    
 }
 
 __getattr__, __dir__, __all__ = attach(__name__, submod_attrs=submod_attrs)

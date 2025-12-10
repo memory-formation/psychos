@@ -160,7 +160,7 @@ class Slider:
         self._tick_width = parse_width(tick_width, window=self.window) or 1
         self._ticks_values = ticks or ()
         self._tick_labels = tick_labels or ()
-        self._tick_size = 10
+        self._tick_size = tick_size
         self._tick_padding = parse_height(tick_padding, window=self.window) or self._height
         self._color = color
         self._components = {}

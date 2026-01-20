@@ -500,7 +500,7 @@ class Slider:
         self._has_been_updated = False
         exit_keys = (exit_key,) if isinstance(exit_key, str) else exit_key
         start_time = clock.time() if clock else _time()
-        self._value = self._initial_value
+        self.value = self._initial_value
 
         def slider_callback(state: "InteractState") -> bool:
             current_time = clock.time() if clock else _time()

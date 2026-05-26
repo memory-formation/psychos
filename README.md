@@ -17,6 +17,7 @@
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/memory-formation/psychos/blob/main/LICENSE)
 ![Platform](https://img.shields.io/badge/platform-Windows%20|%20OS%20X%20|%20Linux-blue.svg)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20395575.svg)](https://doi.org/10.5281/zenodo.20395575)
 
 **Psychos** is a modern, lightweight Python library for creating precise, timing-sensitive behavioral experiments—designed for cognitive neuroscience and related fields. 
 Built for ease of use, the library simplifies the coding process, allowing researchers to create experiments with clear and readable code.
